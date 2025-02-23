@@ -11,6 +11,7 @@ import apiService from '../../../../redux/apiService'
 import { FlatList } from 'react-native-gesture-handler'
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5"
 import MaterialIcons from "react-native-vector-icons/MaterialIcons"
+import AntDesign from "react-native-vector-icons/AntDesign"
 
 const DriverList = () => {
     const navigation = useNavigation()
@@ -83,12 +84,10 @@ const DriverList = () => {
                     <Text style={[styles.infoText, { fontSize: responsiveFontSize(14) }]}>
                         Document Status
                     </Text>
-                    {item.OtherDocument === "" ? (
+                    {item.document_status === 0 ? (
                         <MaterialIcons name="dangerous" size={24} color={"red"} />
                     ) : (
-                        <Text style={[styles.infoText, { fontSize: responsiveFontSize(14) }]}>
-                            {item.OtherDocument}
-                        </Text>
+                        <AntDesign name="checkcircle" size={24} color={"green"} />
                     )}
                 </View>
             </View>

@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
     borderRadius: 5,
-    maxHeight: 200,
+    // maxHeight: 200,
     overflow: 'hidden',
   },
   searchInput: {

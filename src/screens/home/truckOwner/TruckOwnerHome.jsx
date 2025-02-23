@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View, StyleSheet, Image, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import tailwind from 'twrnc';
 import SpaceBetween from '../../../common/SpaceBetween';
 import Heading from '../../../common/Heading';
@@ -9,10 +9,12 @@ import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import { useNavigation } from '@react-navigation/native';
 import { responsiveFontSize } from '../../../utility/utility';
 import apiService from '../../../redux/apiService';
+import { setUserDetails } from '../../../redux/AuthSlice';
 
 const TruckOwnerHome = () => {
   const token = useSelector(state => state.auth.token);
   const navigation = useNavigation();
+  const dispatch = useDispatch()
   const [profileData, setProfileData] = useState(null); // State to store profile data
   const [loading, setLoading] = useState(true); // State to track loading status
   const [error, setError] = useState(null);
@@ -27,6 +29,7 @@ const TruckOwnerHome = () => {
       });
       console.log("Profile Response:", res.data[0]);
       // Assuming the API returns data in `res.data.j.data[0]`
+      dispatch(setUserDetails(res.data[0]))
       setProfileData(res.data[0]); // Update state with profile data
     } catch (error) {
       console.error("Profile Error:", error);

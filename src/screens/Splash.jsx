@@ -3,6 +3,7 @@ import {Animated, Dimensions, ScrollView, StatusBar, StyleSheet, View} from 'rea
 import IMG from '../assets/img/logo.png';
 import {Colors} from '../assets/AppColors';
 import {useNavigation} from '@react-navigation/native';
+import Onboarding from './onboading/Onboarding';
 
 const {height, width} = Dimensions.get('screen');
 
@@ -19,6 +20,7 @@ const Splash = () => {
 
   setTimeout(() => {
     navigation.navigate('Onboarding');
+    // <Onboarding/>
   }, 5000);
   return (
     <View style={styles.container}>

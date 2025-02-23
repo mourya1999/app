@@ -111,17 +111,17 @@
 //   },
 // });
 
-
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useSelector } from 'react-redux';
-import { Colors } from '../assets/AppColors';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import {useSelector} from 'react-redux';
+import {Colors} from '../assets/AppColors';
 
-const CustomTabNavigation = ({ navigation }) => {
-  const roleTab = useSelector(state => state.auth.role || "TruckOwner"); // Default to "TruckOwner"
+const CustomTabNavigation = ({navigation}) => {
+  const roleTab = useSelector(state => state.auth.role || 'TruckOwner'); // Default to "TruckOwner"
   const [activeTab, setActiveTab] = useState('Home');
 
   const handleTabPress = (tabName, screenName) => {
@@ -140,14 +140,15 @@ const CustomTabNavigation = ({ navigation }) => {
           activeTab === 'Home' ? styles.activeTabBorder : null,
         ]}
         onPress={() => {
-          const homeScreen = roleTab === "Driver" ? 'TruckDriverHome' : "TruckOwnerHome";
+          const homeScreen =
+            roleTab === 'Driver' ? 'TruckDriverHome' : 'TruckOwnerHome';
           handleTabPress('Home', homeScreen);
         }}>
         <MaterialIcons
           name="home"
           size={24}
           color={activeTab === 'Home' ? Colors.appColor : '#A0AEC0'}
-          style={{ marginTop: 10 }}
+          style={{marginTop: 10}}
         />
         <Text
           style={[
@@ -159,28 +160,58 @@ const CustomTabNavigation = ({ navigation }) => {
       </TouchableOpacity>
 
       {/* Map Tab */}
-      <TouchableOpacity
-        accessible={true}
-        accessibilityLabel="Map Tab"
-        style={[
-          styles.tab,
-          activeTab === 'Map' ? styles.activeTabBorder : null,
-        ]}
-        onPress={() => handleTabPress('Map', 'Map')}>
-        <FontAwesome6
-          name="location-dot"
-          size={24}
-          color={activeTab === 'Map' ? Colors.appColor : '#A0AEC0'}
-          style={{ marginTop: 10 }}
-        />
-        <Text
+      {roleTab === 'Driver' ? (
+        <TouchableOpacity
+          accessible={true}
+          accessibilityLabel="Map Tab"
           style={[
-            styles.tabText,
-            activeTab === 'Map' && styles.activeTabText,
-          ]}>
-          Map
-        </Text>
-      </TouchableOpacity>
+            styles.tab,
+            activeTab === 'Map' ? styles.activeTabBorder : null,
+          ]}
+          onPress={() => {
+            const homeScreen = roleTab === 'Driver' ? 'MapDriver' : 'Order';
+            handleTabPress('Map', homeScreen);
+          }}>
+          <FontAwesome6
+            name="location-dot"
+            size={24}
+            color={activeTab === 'Map' ? Colors.appColor : '#A0AEC0'}
+            style={{marginTop: 10}}
+          />
+          <Text
+            style={[
+              styles.tabText,
+              activeTab === 'Map' && styles.activeTabText,
+            ]}>
+            Map
+          </Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          accessible={true}
+          accessibilityLabel="Order Tab"
+          style={[
+            styles.tab,
+            activeTab === 'Order' ? styles.activeTabBorder : null,
+          ]}
+          onPress={() => {
+            handleTabPress('Order', 'Order');
+          }}>
+          <Fontisto
+            name="prescription"
+            size={24}
+            color={activeTab === 'Order' ? Colors.appColor : '#A0AEC0'}
+            style={{marginTop: 10}}
+          />
+          <Text
+            style={[
+              styles.tabText,
+              activeTab === 'Order' && styles.activeTabText,
+            ]}>
+            Order
+          </Text>
+        </TouchableOpacity>
+      )}
 
       {/* Account Tab */}
       <TouchableOpacity
@@ -190,12 +221,15 @@ const CustomTabNavigation = ({ navigation }) => {
           styles.tab,
           activeTab === 'Account' ? styles.activeTabBorder : null,
         ]}
-        onPress={() => handleTabPress('Account', 'Account')}>
+        onPress={() => {
+          const homeScreen = roleTab === 'Driver' ? 'AccountDriver' : 'Account';
+          handleTabPress('Account', homeScreen);
+        }}>
         <MaterialCommunityIcons
           name="account"
           size={25}
           color={activeTab === 'Account' ? Colors.appColor : '#A0AEC0'}
-          style={{ marginTop: 10 }}
+          style={{marginTop: 10}}
         />
         <Text
           style={[

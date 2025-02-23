@@ -22,9 +22,13 @@ const phoneSlice = createSlice({
     clearPhoneNumber: (state) => {
       state.phoneNumber = ''; 
     },
+    setUserDetails: (state, action) => {
+      // Update the state with the payload
+      return { ...state, ...action.payload };
+    },
   },
 });
 
-export const { savePhoneNumber, clearPhoneNumber, saveRole , saveToken} = phoneSlice.actions;
+export const { savePhoneNumber, clearPhoneNumber, saveRole , saveToken,setUserDetails} = phoneSlice.actions;
 
 export default phoneSlice.reducer;

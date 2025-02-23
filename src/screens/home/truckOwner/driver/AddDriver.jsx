@@ -1,24 +1,48 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Animated, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Animated, StyleSheet, ScrollView, ToastAndroid } from 'react-native';
 import tailwind from 'twrnc';
 import Heading from '../../../../common/Heading';
 import CommonInput from '../../../../common/CommonInput';
 import { responsiveFontSize } from '../../../../utility/utility';
 import CommonDropdown from '../../../../common/CommonDropdown';
-import { statesAndDistricts } from '../../../StateAndDestrict';
+import {statesAndDistricts} from "../../../StateAndDestrict"
 import Icon from 'react-native-vector-icons/Fontisto';
 import { Colors } from '../../../../assets/AppColors';
 import DatePicker from "react-native-date-picker";
+import { useSelector } from 'react-redux';
 
 const AddDriver = () => {
+    const token = useSelector((state) => state.auth.token);
     const [step, setStep] = useState(1);
     const progress = useRef(new Animated.Value(1)).current;
-    const [selectedState, setSelectedState] = useState()
-    const [selectedCity, setSelectedCity] = useState()
-    const [selected, setSelected] = useState(1);
+
+    // Form Data State
+    const [formData, setFormData] = useState({
+        phone: '',
+        FirstName: '',
+        LastName: '',
+        Email: '',
+        EmergencyContactNumber: '',
+        Address: '',
+        State: '',
+        City: '',
+        CompanyName: '',
+        DrivingLicenseNumber: '',
+        LicenseExpiryDate: '',
+        IsPoliceVerification: 1,
+    });
+
+    // Dropdown States
+    const [selectedState, setSelectedState] = useState('');
+    const [selectedCity, setSelectedCity] = useState('');
+
+    // Date Picker States
     const [open, setOpen] = useState(false);
     const [date, setDate] = useState(new Date());
-    const [formattedDate, setFormattedDate] = useState("");
+    const [formattedDate, setFormattedDate] = useState('');
+
+    // Radio Button State
+    const [isPoliceVerified, setIsPoliceVerified] = useState(1);
 
     useEffect(() => {
         Animated.timing(progress, {
@@ -36,6 +60,85 @@ const AddDriver = () => {
         if (step > 1) setStep(step - 1);
     };
 
+      // Handle Input Changes
+      const handleInputChange = (key, value) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            [key]: value,
+        }));
+    };
+      // Validation Function
+      const validateForm = () => {
+        const {
+            phone,
+            FirstName,
+            LastName,
+            Email,
+            EmergencyContactNumber,
+            Address,
+            State,
+            City,
+            CompanyName,
+            DrivingLicenseNumber,
+            LicenseExpiryDate,
+        } = formData;
+
+        if (!phone || !/^\d{10}$/.test(phone)) {
+            ToastAndroid.show('Please enter a valid 10-digit phone number.', ToastAndroid.SHORT);
+            return false;
+        }
+
+        if (!FirstName || !LastName) {
+            ToastAndroid.show('First Name and Last Name are required.', ToastAndroid.SHORT);
+            return false;
+        }
+
+        if (!Email || !/\S+@\S+\.\S+/.test(Email)) {
+            ToastAndroid.show('Please enter a valid email address.', ToastAndroid.SHORT);
+            return false;
+        }
+
+        if (!EmergencyContactNumber || !/^\d{10}$/.test(EmergencyContactNumber)) {
+            ToastAndroid.show('Please enter a valid 10-digit emergency contact number.', ToastAndroid.SHORT);
+            return false;
+        }
+
+        if (!Address || !State || !City) {
+            ToastAndroid.show('Address, State, and City are required.', ToastAndroid.SHORT);
+            return false;
+        }
+
+        if (!CompanyName || !DrivingLicenseNumber || !LicenseExpiryDate) {
+            ToastAndroid.show('Company Name, Driving License Number, and Expiry Date are required.', ToastAndroid.SHORT);
+            return false;
+        }
+
+        return true;
+    };
+
+    // Handle Form Submission
+    const handleSubmit = async () => {
+        if (!validateForm()) {
+            return;
+        }
+
+        try {
+            const res = await apiService({
+                endpoint: "truck_owner/driver/registration", // Replace with your actual endpoint
+                method: "POST",
+                data: formData,
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            console.log("formData", formData)
+            console.log("API Response:", res.data);
+            ToastAndroid.show('Driver registered successfully!', ToastAndroid.SHORT);
+        } catch (error) {
+            console.log("Driver registration error:", error);
+            ToastAndroid.show('Failed to register Driver. Please try again.', ToastAndroid.SHORT);
+        }
+    };
     return (
         <>
             <Heading leftIcon={true} heading={"Driver Registrations "} rightAction={<Text></Text>} />
@@ -75,93 +178,135 @@ const AddDriver = () => {
                 {/* Form Content */}
                 {step === 1 && (
                     <ScrollView>
-                        <View style={[styles.form, { marginTop: 10 }]}>
+                        <View style={styles.form}>
                             <CommonInput
-                                label={"Contact No *"}
-                                placeholder={"Enter Contact No"}
-                                value={"po"}
-                            // onChangeText={}
+                                label={"Phone *"}
+                                placeholder={"Enter Phone Number"}
+                                value={formData.phone}
+                                onChangeText={(text) => handleInputChange('phone', text)}
+                                keyboardType="numeric"
                             />
                             <CommonInput
-                                label={"Email Address*"}
-                                placeholder={"Enter Email Address"}
-                                value={"po"}
-                            // onChangeText={}
+                                label={"First Name *"}
+                                placeholder={"Enter First Name"}
+                                value={formData.FirstName}
+                                onChangeText={(text) => handleInputChange('FirstName', text)}
                             />
                             <CommonInput
-                                label={"Emergency Contact No*"}
-                                placeholder={"Enter Emergency Contact No"}
-                                value={"po"}
-                            // onChangeText={}
+                                label={"Last Name *"}
+                                placeholder={"Enter Last Name"}
+                                value={formData.LastName}
+                                onChangeText={(text) => handleInputChange('LastName', text)}
+                            />
+                            <CommonInput
+                                label={"Email *"}
+                                placeholder={"Enter Email"}
+                                value={formData.Email}
+                                onChangeText={(text) => handleInputChange('Email', text)}
+                                keyboardType="email-address"
+                            />
+                            <CommonInput
+                                label={"Emergency Contact Number *"}
+                                placeholder={"Enter Emergency Contact Number"}
+                                value={formData.EmergencyContactNumber}
+                                onChangeText={(text) => handleInputChange('EmergencyContactNumber', text)}
+                                keyboardType="numeric"
+                            />
+                            <CommonInput
+                                label={"Address *"}
+                                placeholder={"Enter Address"}
+                                value={formData.Address}
+                                onChangeText={(text) => handleInputChange('Address', text)}
                             />
                             <CommonDropdown
-                                label={"State"}
-                                placeholder={"Select State"}
-                                options={Object.keys(statesAndDistricts)} // All states as options
-                                value={selectedState}
+                                label={"Select State *"}
+                                placeholder={"State"}
+                                options={Object.keys(statesAndDistricts)}
                                 onSelect={(state) => {
                                     setSelectedState(state);
                                     setSelectedCity(null);
+                                    handleInputChange('State', state);
                                 }}
+                                value={selectedState}
                             />
                             <CommonDropdown
-                                label={"City"}
-                                placeholder={"Select City"}
-                                options={statesAndDistricts[selectedState]} // Districts of the selected state
-                                value={selectedCity}
+                                label={"Select City *"}
+                                placeholder={"City"}
+                                options={statesAndDistricts[selectedState] || []}
                                 onSelect={(city) => {
                                     setSelectedCity(city);
+                                    handleInputChange('City', city);
                                 }}
+                                value={selectedCity}
                             />
                         </View>
                     </ScrollView>
-
                 )}
 
                 {step === 2 && (
                     <ScrollView>
-                        <View style={[styles.form, { marginTop: 10 }]}>
+                        <View style={styles.form}>
                             <CommonInput
                                 label={"Company Name *"}
                                 placeholder={"Enter Company Name"}
-                                value={"po"}
-                            // onChangeText={}
+                                value={formData.CompanyName}
+                                onChangeText={(text) => handleInputChange('CompanyName', text)}
                             />
                             <CommonInput
-                                label={"Driving Licence Number *"}
-                                placeholder={"Enter Driving Licence Number"}
-                                value={"po"}
-                            // onChangeText={}
+                                label={"Driving License Number *"}
+                                placeholder={"Enter Driving License Number"}
+                                value={formData.DrivingLicenseNumber}
+                                onChangeText={(text) => handleInputChange('DrivingLicenseNumber', text)}
                             />
-                            <CommonInput
-                                label={"Licence Expiry Date *"}
-                                placeholder={"Select Licence Expiry Date"}
-                                value={formattedDate} // Show formatted date in input
-                                rightAction={
-                                    <TouchableOpacity onPress={() => setOpen(true)}>
-                                        <Icon name="date" size={20} color={Colors.appColor} />
-                                    </TouchableOpacity>
-                                }
+                            <TouchableOpacity onPress={() => setOpen(true)} style={styles.datePickerButton}>
+                                <Text style={styles.datePickerText}>
+                                    {formattedDate || 'Select License Expiry Date'}
+                                </Text>
+                            </TouchableOpacity>
+                            <DatePicker
+                                modal
+                                open={open}
+                                date={date}
+                                mode="date"
+                                onConfirm={(selectedDate) => {
+                                    setOpen(false);
+                                    setDate(selectedDate);
+
+                                    // Format Date to "DD-MM-YYYY"
+                                    const formatted = selectedDate.toLocaleDateString('en-GB').split('/').reverse().join('-');
+                                    setFormattedDate(formatted);
+                                    handleInputChange('LicenseExpiryDate', formatted);
+                                }}
+                                onCancel={() => setOpen(false)}
                             />
-                            <View style={tailwind`flex-row items-center justify-between border border-gray-300 rounded-sm p-3 w-full`}>
-                                {/* First Radio Button */}
+                            <View style={styles.radioGroup}>
+                                <Text style={styles.radioLabel}>Police Verification:</Text>
                                 <TouchableOpacity
-                                    onPress={() => setSelected(1)}
-                                    style={tailwind`w-6 h-6 border-2 ${selected === 1 ? 'border-teal-500' : 'border-gray-600'} rounded-full items-center justify-center`}
+                                    onPress={() => setIsPoliceVerified(1)}
+                                    style={tailwind`flex-row items-center`}
                                 >
-                                    {selected === 1 && <View style={tailwind`w-4 h-4 bg-teal-500 rounded-full`} />}
-
+                                    <View
+                                        style={tailwind`w-6 h-6 border-2 ${
+                                            isPoliceVerified === 1 ? 'border-teal-500' : 'border-gray-600'
+                                        } rounded-full items-center justify-center`}
+                                    >
+                                        {isPoliceVerified === 1 && <View style={tailwind`w-3 h-3 bg-teal-500 rounded-full`} />}
+                                    </View>
+                                    <Text style={styles.radioText}>Yes</Text>
                                 </TouchableOpacity>
-                                <Text>Yes</Text>
-                                {/* Second Radio Button */}
                                 <TouchableOpacity
-                                    onPress={() => setSelected(2)}
-                                    style={tailwind`w-6 h-6 border-2 ${selected === 2 ? 'border-gray-600' : 'border-gray-600'} rounded-full items-center justify-center`}
+                                    onPress={() => setIsPoliceVerified(0)}
+                                    style={tailwind`flex-row items-center`}
                                 >
-                                    {selected === 2 && <View style={tailwind`w-4 h-4 bg-gray-600 rounded-full`} />}
-
+                                    <View
+                                        style={tailwind`w-6 h-6 border-2 ${
+                                            isPoliceVerified === 0 ? 'border-teal-500' : 'border-gray-600'
+                                        } rounded-full items-center justify-center`}
+                                    >
+                                        {isPoliceVerified === 0 && <View style={tailwind`w-3 h-3 bg-teal-500 rounded-full`} />}
+                                    </View>
+                                    <Text style={styles.radioText}>No</Text>
                                 </TouchableOpacity>
-                                <Text>No</Text>
                             </View>
                         </View>
                     </ScrollView>
@@ -169,8 +314,16 @@ const AddDriver = () => {
 
                 {/* Navigation Buttons */}
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={handleNext} style={styles.button}>
-                        <Text style={styles.buttonText}>{step === 2 ? 'Done' : 'Next'}</Text>
+                    {step > 1 && (
+                        <TouchableOpacity onPress={handleBack} style={styles.buttonSecondary}>
+                            <Text style={styles.buttonText}>Back</Text>
+                        </TouchableOpacity>
+                    )}
+                    <TouchableOpacity
+                        onPress={step === 2 ? handleSubmit : handleNext}
+                        style={styles.button}
+                    >
+                        <Text style={styles.buttonText}>{step === 2 ? 'Submit' : 'Next'}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -262,7 +415,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         marginTop: 20,
-        width: '100%'
+        width: '100%',
+        gap: 12
     },
     button: {
         backgroundColor: '#33b2a5',
@@ -283,3 +437,4 @@ const styles = StyleSheet.create({
         fontSize: responsiveFontSize(16)
     },
 });
+

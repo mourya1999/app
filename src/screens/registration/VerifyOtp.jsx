@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CommonButton from '../../common/CommonButton';
 import { saveOwner, saveRole, saveToken } from '../../redux/AuthSlice';
 import { OtpInput } from "react-native-otp-entry";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const VerifyOtp = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ const VerifyOtp = ({ navigation }) => {
 
       console.log("API Response:", response);
       dispatch(saveToken(response.access_token));
-
+      AsyncStorage.setItem("storeToken", response.access_token)
       if (response.user_type === "new") {
         Alert.alert('Success', `New user ${response?.message}` || 'OTP verified successfully!');
         navigation.navigate('SelectUser');
