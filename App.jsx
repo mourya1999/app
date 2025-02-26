@@ -37,6 +37,7 @@ import Company from './src/screens/account/Company';
 import KYCScreen from './src/screens/account/KYCScreen';
 import Personal from './src/screens/account/Personal';
 import Support from './src/screens/account/Support';
+import EditProfile from './src/screens/account/EditProfile';
 const Tab = createBottomTabNavigator();
 const AppTabs = () => {
   const roleHome = useSelector(state => state.auth.role || 'Truck Owner');
@@ -269,6 +270,11 @@ const HomeStackNavigator = () => {
           <HomeStack.Screen
             name="Support"
             component={Support}
+            options={{headerShown: false}}
+          />
+          <HomeStack.Screen
+            name="EditProfile"
+            component={EditProfile}
             options={{headerShown: false}}
           />
           <HomeStack.Screen

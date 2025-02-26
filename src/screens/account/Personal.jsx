@@ -7,7 +7,6 @@ import {Colors} from '../../assets/AppColors';
 
 const Personal = () => {
   const profileData = useSelector(state => state.auth);
-
   return (
     <View>
       <Heading
@@ -15,7 +14,6 @@ const Personal = () => {
         heading={'Personal Information'}
         rightAction={<Text></Text>}
       />
-
       <Image
         source={{
           uri: profileData?.profile_image

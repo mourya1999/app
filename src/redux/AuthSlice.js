@@ -13,6 +13,9 @@ const phoneSlice = createSlice({
     saveToken:(state, action)=>{
       state.token = action.payload
     },
+    clearToken:(state)=>{
+      state.token = ''
+    },
     savePhoneNumber: (state, action) => {
       state.phoneNumber = action.payload; 
     },
@@ -29,6 +32,6 @@ const phoneSlice = createSlice({
   },
 });
 
-export const { savePhoneNumber, clearPhoneNumber, saveRole , saveToken,setUserDetails} = phoneSlice.actions;
+export const { savePhoneNumber, clearPhoneNumber, saveRole , saveToken,setUserDetails, clearToken } = phoneSlice.actions;
 
 export default phoneSlice.reducer;

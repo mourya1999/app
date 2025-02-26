@@ -46,7 +46,7 @@
 
 import axios from 'axios';
 
-export const baseUrl = 'https://api.hindustantruckers.com/api/';
+export const baseUrl = 'http://uat.hindustantruckers.com/api/';
 
 const apiService = async ({
   endpoint,
