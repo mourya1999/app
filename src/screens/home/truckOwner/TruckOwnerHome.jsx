@@ -30,7 +30,7 @@ const TruckOwnerHome = () => {
       console.log("Profile Response:", res.data[0]);
       // Assuming the API returns data in `res.data.j.data[0]`
       dispatch(setUserDetails(res.data[0]))
-      setProfileData(res.data[0]); // Update state with profile data
+      setProfileData(res.data[0]); 
     } catch (error) {
       console.error("Profile Error:", error);
       setError("Failed to load profile. Please try again.");
@@ -62,7 +62,7 @@ const TruckOwnerHome = () => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <Heading leftIcon={true} heading="Profile" rightAction={true} />
+      <Heading leftIcon={false} heading="Profile" rightAction={true} />
 
       <ScrollView contentContainerStyle={styles.scrollView}>
         {/* Profile Section */}
@@ -70,7 +70,7 @@ const TruckOwnerHome = () => {
           <View style={tailwind`w-[25%]`}>
             <Image source={{
               uri: profileData?.profile_image
-                ? `${profileData.image_base_url}${profileData.profile_image}`
+                ? `http://uat.hindustantruckers.com/storage/app/public/${profileData.profile_image}`
                 : "https://via.placeholder.com/100", // Default placeholder image
             }} style={styles.profileImage} />
           </View>
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 60,
     height: 60,
-    borderRadius: 8,
+    borderRadius: 50,
     borderWidth: 1,
     borderColor: Colors.appColor,
   },

@@ -3,5 +3,6 @@ export const Colors = {
     textLight:"#6E6E6E",
     textDark:"#636063",
     borderColor:"#515151",
-    inputBorder:"#A7A7A7"
+    inputBorder:"#A7A7A7",
+    pendingolor:"orange"
 }

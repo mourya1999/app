@@ -28,16 +28,14 @@ import AddDriver from './src/screens/home/truckOwner/driver/AddDriver';
 import DriverDetail from './src/screens/home/truckOwner/driver/DriverDetail';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Orders from './src/screens/orders/Orders';
-import Cancelled from './src/screens/orders/Cancelled';
-import Completed from './src/screens/orders/Completed';
-import Ongoing from './src/screens/orders/Ongoing';
-import Recent from './src/screens/orders/Recent';
 import BankDetails from './src/screens/account/BankDetails';
 import Company from './src/screens/account/Company';
 import KYCScreen from './src/screens/account/KYCScreen';
 import Personal from './src/screens/account/Personal';
 import Support from './src/screens/account/Support';
 import EditProfile from './src/screens/account/EditProfile';
+import OrderDetail from './src/screens/orders/OrderDetail';
+import UpdateDoc from './src/screens/home/truckOwner/truck/UpdateDoc';
 const Tab = createBottomTabNavigator();
 const AppTabs = () => {
   const roleHome = useSelector(state => state.auth.role || 'Truck Owner');
@@ -96,7 +94,6 @@ const HomeStackNavigator = () => {
   const token = useSelector(state => state.auth.token);
   const navigation = useNavigation();
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
-  const [tokenSync, setTokenSync] = useState(null);
   useEffect(() => {
     const bootstrapAsync = async () => {
       try {
@@ -104,9 +101,6 @@ const HomeStackNavigator = () => {
           'hasSeenOnboarding',
         );
         setHasSeenOnboarding(onboardingStatus === 'true');
-
-        const storedToken = await AsyncStorage.getItem('storeToken');
-        setTokenSync(storedToken);
       } catch (error) {
         console.error('Error retrieving data:', error);
       }
@@ -115,7 +109,6 @@ const HomeStackNavigator = () => {
     bootstrapAsync();
   }, []);
 
-  console.log('token store ', tokenSync);
   useEffect(() => {
     const getScreenName = () => {
       if (token) {
@@ -135,6 +128,13 @@ const HomeStackNavigator = () => {
     );
   }, [token, navigation]);
 
+  useEffect(() => {
+    if (token) {
+      return 'AppTabs';
+    } else {
+      return 'Splash';
+    }
+  }, []);
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
@@ -174,17 +174,22 @@ const HomeStackNavigator = () => {
             component={VerifyOtp}
             options={{headerShown: false}}
           />
-             <HomeStack.Screen
-          name="EnterNumber"
-          component={EnterNumber}
-          options={{headerShown: false}}
-        />
+          <HomeStack.Screen
+            name="EnterNumber"
+            component={EnterNumber}
+            options={{headerShown: false}}
+          />
         </>
       ) : (
         <>
           <HomeStack.Screen
             name="TruckOwner"
             component={TruckOwner}
+            options={{headerShown: false}}
+          />
+          <HomeStack.Screen
+            name="OrderDetail"
+            component={OrderDetail}
             options={{headerShown: false}}
           />
           <HomeStack.Screen
@@ -215,26 +220,6 @@ const HomeStackNavigator = () => {
           <HomeStack.Screen
             name="TruckRegistration"
             component={TruckRegistration}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="Cancelled"
-            component={Cancelled}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="Completed"
-            component={Completed}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="Ongoing"
-            component={Ongoing}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="Recent"
-            component={Recent}
             options={{headerShown: false}}
           />
           <HomeStack.Screen
@@ -275,6 +260,11 @@ const HomeStackNavigator = () => {
           <HomeStack.Screen
             name="EditProfile"
             component={EditProfile}
+            options={{headerShown: false}}
+          />
+          <HomeStack.Screen
+            name="UpdateDoc"
+            component={UpdateDoc}
             options={{headerShown: false}}
           />
           <HomeStack.Screen

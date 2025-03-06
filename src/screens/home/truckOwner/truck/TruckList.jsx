@@ -41,7 +41,7 @@ const TruckList = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('API Response:', res.data);
+      console.log('truck list API Response:', res.data);
 
       // Set the data in the state
       setTrucks(res.data || []); // Ensure data is an array even if API returns null
@@ -110,17 +110,23 @@ const TruckList = () => {
         <View style={tailwind`w-[50%]`}>
           <SpaceBetween>
             <View style={styles.labelText}>
-              <SpaceBetween padding={0} justify="" style={tailwind`gap-2`}>
+              <SpaceBetween padding={0} justify="" style={tailwind`gap-1`}>
                 <Text>Status : </Text>
-                {item.Status === '0' ? (
+                {item.Status === 0 ? (
                   <>
-                    <Octicons name="skip" size={16} color={'red'} />{' '}
-                    <Text style={{color: '#000'}}>Pending</Text>
+                    <Octicons name="skip" size={12} color={'red'} />
+                    <Text
+                      style={{color: '#000', fontSize: responsiveFontSize(12)}}>
+                      Not Verified
+                    </Text>
                   </>
                 ) : (
                   <>
-                    <Octicons name="skip" size={16} color={'green'} />{' '}
-                    <Text style={{color: '#000'}}>Verify</Text>
+                    <Octicons name="skip" size={12} color={'green'} />{' '}
+                    <Text
+                      style={{color: '#000', fontSize: responsiveFontSize(12)}}>
+                      Verified
+                    </Text>
                   </>
                 )}
               </SpaceBetween>
@@ -132,12 +138,25 @@ const TruckList = () => {
               <Text style={[styles.labelText, {color: Colors.textDark}]}>
                 Route:<Text>{item.OriginRoute}</Text>
               </Text>
-              <Text style={[styles.labelText, {color: Colors.textDark}]}>
-                Documentation Status:
-                <Text>
-                  {item.document_status === '0' ? 'Pending' : 'Completed'}
+              <TouchableOpacity
+                onPress={() => {
+                  if (item.document_status === 0) {
+                    navigation.navigate('UpdateDoc', {item});
+                  }
+                }}>
+                <Text style={[styles.labelText, {color: Colors.textDark}]}>
+                  Documentation Status:
+                  <Text
+                    style={{
+                      color:
+                        item.document_status === 0
+                          ? Colors.pendingolor
+                          : 'green',
+                    }}>
+                    {item.document_status === 0 ? 'Pending' : 'Completed'}
+                  </Text>
                 </Text>
-              </Text>
+              </TouchableOpacity>
             </View>
           </SpaceBetween>
         </View>
@@ -166,8 +185,8 @@ const TruckList = () => {
               name="width-wide"
               size={14}
               color={Colors.appColor}
-            />{' '}
-            {item.Width}
+            />
+            {item.Width} Feets
           </Text>
           <Text style={[styles.labelText, {color: Colors.textLight}]}>
             Capacity
@@ -178,7 +197,7 @@ const TruckList = () => {
               size={14}
               color={Colors.appColor}
             />{' '}
-            {item.Capacity}
+            {item.Capacity} {item.CapacityUnit}
           </Text>
         </View>
         {/* Right Column */}
@@ -188,7 +207,7 @@ const TruckList = () => {
           </Text>
           <Text style={[styles.valueText, {color: Colors.textDark}]}>
             <MaterialIcons name="height" size={14} color={Colors.appColor} />{' '}
-            {item.Height}
+            {item.Height} Feets
           </Text>
           <Text style={[styles.labelText, {color: Colors.textLight}]}>
             Expected Price
@@ -199,7 +218,7 @@ const TruckList = () => {
               size={14}
               color={Colors.appColor}
             />{' '}
-            {item.Rate}
+            {item.Rate} /KM
           </Text>
         </View>
       </SpaceBetween>
@@ -209,7 +228,10 @@ const TruckList = () => {
 
       {/* Assign Driver Button */}
       <SpaceBetween justify="space-between" style={tailwind`p-3`}>
-        <Text></Text>
+        <Text
+          style={[tailwind`text-gray-500`, {fontSize: responsiveFontSize(12)}]}>
+          {item.TruckType} | {item.TruckNumber}
+        </Text>
         <TouchableOpacity
           onPress={() => {
             setTruckId(item.id);

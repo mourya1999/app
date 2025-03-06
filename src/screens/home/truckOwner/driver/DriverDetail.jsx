@@ -17,7 +17,7 @@ import apiService from '../../../../redux/apiService';
 
 const DriverDetail = ({route}) => {
   const {item: driver} = route.params;
-  // const { item: driverId } = route.params;
+  console.log('driver , id ', driver.id);
   const token = useSelector(state => state.auth.token);
   const IMAGE_BASE_URL = 'https://api.hindustantruckers.com/api/';
   // const [driver, setDrivers] = useState({})
@@ -30,31 +30,32 @@ const DriverDetail = ({route}) => {
     ));
   };
 
-  // const getDriverDetail = async () => {
-  //   try {
-  //     const res = await apiService({
-  //       endpoint: "truck_owner/driver/details",
-  //       method: "POST",
-  //       data: {
-  //         "driver_id": driverId.id
-  //       },
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     console.log("driver detail Response:", res);
+  const getDriverDetail = async () => {
+    try {
+      const res = await apiService({
+        endpoint: 'truck_owner/driver/details',
+        method: 'POST',
+        data: {
+          driver_id: driver.id,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('driver detail Response:', res);
 
-  //     setLoading(false); // Stop loading
-  //   } catch (error) {
-  //     console.log("Error fetching truck list:", error);
-  //     setLoading(false); // Stop loading in case of error
-  //   }
-  // };
+      setLoading(false); // Stop loading
+    } catch (error) {
+      console.log('Error fetching truck list:', error);
+      setLoading(false); // Stop loading in case of error
+    }
+  };
 
-  // // Fetch data when the component mounts or when the token changes
-  // useEffect(() => {
-  //   getDriverDetail();
-  // }, []);
+  // Fetch data when the component mounts or when the token changes
+  useEffect(() => {
+    getDriverDetail();
+  }, []);
+
   const handleCall = phoneNumber => {
     if (!phoneNumber) {
       Alert.alert('Error', 'Phone number not available');
@@ -121,7 +122,7 @@ const DriverDetail = ({route}) => {
             {driver.IsPoliceVerification ? 'Completed' : 'Pending'}
           </Text>
         </Text>
-        <SpaceBetween justify='center' style={tailwind``}>
+        <SpaceBetween justify="center" style={tailwind``}>
           <Text>Asign truck</Text>
         </SpaceBetween>
         <SpaceBetween justify="space-between">

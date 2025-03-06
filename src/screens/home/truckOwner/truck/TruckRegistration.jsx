@@ -37,6 +37,7 @@ const TruckRegistration = () => {
     ChassisNumber: '',
     PSTNumber: '',
     GSTNumber: '',
+    CapacityUnit:selectedUnit
   });
   const [selectedTruckName, setSelectedTruckName] = useState("")
 

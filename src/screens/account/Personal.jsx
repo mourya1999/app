@@ -7,6 +7,7 @@ import {Colors} from '../../assets/AppColors';
 
 const Personal = () => {
   const profileData = useSelector(state => state.auth);
+  console.log("personal : ", profileData)
   return (
     <View>
       <Heading
@@ -17,7 +18,7 @@ const Personal = () => {
       <Image
         source={{
           uri: profileData?.profile_image
-            ? `${profileData.image_base_url}${profileData.profile_image}`
+            ? `http://uat.hindustantruckers.com/storage/app/public/${profileData.profile_image}`
             : 'https://via.placeholder.com/100', 
         }}
         style={styles.profileImage}

@@ -169,7 +169,7 @@ const CustomTabNavigation = ({navigation}) => {
             activeTab === 'Map' ? styles.activeTabBorder : null,
           ]}
           onPress={() => {
-            const homeScreen = roleTab === 'Driver' ? 'MapDriver' : 'Order';
+            const homeScreen = roleTab === 'Driver' ? 'Map' : 'Order';
             handleTabPress('Map', homeScreen);
           }}>
           <FontAwesome6

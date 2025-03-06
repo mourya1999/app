@@ -63,7 +63,7 @@ const Account = ({navigation}) => {
           <Image
             source={{
               uri: user?.profile_image
-                ? `${user.image_base_url}${user.profile_image}`
+                ? `http://uat.hindustantruckers.com/storage/app/public/${user.profile_image}`
                 : 'https://via.placeholder.com/100', // Default placeholder image
             }}
             style={tw`w-16 h-16 rounded-full border-2 border-white`}
