@@ -123,8 +123,9 @@ const EditProfile = () => {
 
       {/* Profile Image with Upload Button */}
       <View style={styles.imageContainer}>
+
         <Image
-          source={{ uri: imageUri || 'https://via.placeholder.com/100' }}
+          source={{ uri: imageUri || `http://uat.hindustantruckers.com/storage/app/public/${profileData.profile_image}` }}
           style={styles.profileImage}
         />
         <TouchableOpacity onPress={pickImage} style={styles.uploadIcon}>
