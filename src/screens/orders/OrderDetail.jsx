@@ -12,6 +12,7 @@ import {
 import { useSelector } from "react-redux";
 import apiService from "../../redux/apiService";
 import Heading from "../../common/Heading";
+import { responsiveFontSize } from "../../utility/utility";
 
 const OrderDetail = ({ route }) => {
   const { item: order } = route.params;
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   title: {
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
     fontWeight: "bold",
     color: "#333",
     marginBottom: 5,
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 3,
     borderRadius: 5,
-    fontSize: 12,
+    fontSize: responsiveFontSize(12),
     fontWeight: "bold",
   },
   row: {
@@ -198,7 +199,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   label: {
-    fontSize: 14,
+    fontSize: responsiveFontSize(14),
     fontWeight: "600",
     color: "#555",
     marginBottom: 4,
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
-    fontSize: 14,
+    fontSize: responsiveFontSize(14),
   },
   centered: {
     flex: 1,
@@ -231,7 +232,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
   },
   retryButton: {
     marginTop: 10,

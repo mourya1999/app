@@ -141,7 +141,7 @@ const TruckDriverHome = () => {
             <Text style={tailwind`text-gray-500`}>No</Text>
             {/* <Image
               source={{
-                uri: `http://uat.hindustantruckers.com/storage/app/public/${item.profile_image}`,
+                uri: `https://uat.hindustantruckers.com/storage/app/public/${item.profile_image}`,
               }}
               style={styles.profileImage}
             /> */}

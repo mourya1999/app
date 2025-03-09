@@ -70,7 +70,7 @@ const TruckOwnerHome = () => {
           <View style={tailwind`w-[25%]`}>
             <Image source={{
               uri: profileData?.profile_image
-                ? `http://uat.hindustantruckers.com/storage/app/public/${profileData.profile_image}`
+                ? `https://uat.hindustantruckers.com/storage/app/public/${profileData.profile_image}`
                 : "https://via.placeholder.com/100", // Default placeholder image
             }} style={styles.profileImage} />
           </View>

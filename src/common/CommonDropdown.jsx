@@ -10,6 +10,7 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Colors } from '../assets/AppColors';
 import tailwind from 'twrnc';
+import { responsiveFontSize } from '../utility/utility';
 
 const CommonDropdown = ({
   value,
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   label: {
-    fontSize: 14,
+    fontSize: responsiveFontSize(14),
     fontWeight: 'bold',
     color: Colors.textDark,
     marginBottom: 5,
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
     color: Colors.textDark,
   },
   placeholder: {
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderBottomWidth: 1,
     borderBottomColor: Colors.border,
-    fontSize: 14,
+    fontSize: responsiveFontSize(14),
   },
   dropdownItem: {
     padding: 12,
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.border,
   },
   dropdownText: {
-    fontSize: 14,
+    fontSize: responsiveFontSize(14),
     color: Colors.textDark,
   },
 });

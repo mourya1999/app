@@ -18,7 +18,7 @@ const Personal = () => {
       <Image
         source={{
           uri: profileData?.profile_image
-            ? `http://uat.hindustantruckers.com/storage/app/public/${profileData.profile_image}`
+            ? `https://uat.hindustantruckers.com/storage/app/public/${profileData.profile_image}`
             : 'https://via.placeholder.com/100', 
         }}
         style={styles.profileImage}

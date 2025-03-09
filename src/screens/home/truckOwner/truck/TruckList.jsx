@@ -408,14 +408,14 @@ const styles = StyleSheet.create({
   // Label Text Style
   labelText: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 14,
+    fontSize: responsiveFontSize(14),
     fontWeight: '500',
     marginBottom: 4,
   },
   // Value Text Style
   valueText: {
     fontFamily: 'Poppins-Bold',
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
     fontWeight: '700',
     marginBottom: 8,
   },

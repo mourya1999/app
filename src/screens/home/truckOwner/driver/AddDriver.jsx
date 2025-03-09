@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     title: {
-        fontSize: 22,
+        fontSize: responsiveFontSize(22),
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 20,
@@ -395,13 +395,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     heading: {
-        fontSize: 18,
+        fontSize: responsiveFontSize(18),
         fontWeight: '600',
         textAlign: 'center',
         marginBottom: 20,
     },
     label: {
-        fontSize: 16,
+        fontSize: responsiveFontSize(16),
         marginVertical: 10,
     },
     input: {

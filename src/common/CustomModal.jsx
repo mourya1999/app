@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import SpaceBetween from './SpaceBetween';
 import AntDesign from "react-native-vector-icons/AntDesign"
 import tailwind from 'twrnc';
+import { responsiveFontSize } from '../utility/utility';
 
 
 const CustomModal = ({ isVisible, onClose, width=320, height=600 , content, modalTitle }) => {
@@ -52,12 +53,12 @@ const styles = StyleSheet.create({
         minHeight: '40%', // Ensures content is visible
     },
     modalTitle: {
-        fontSize: 18,
+        fontSize: responsiveFontSize(18),
         fontWeight: '400',
         color:'#fff'
     },
     modalText: {
-        fontSize: 14,
+        fontSize: responsiveFontSize(14),
         color: '#4a4a4a',
         marginTop: 8,
         textAlign: 'center',
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
         borderRadius: 20,
     },
     closeButtonText: {
-        fontSize: 16,
+        fontSize: responsiveFontSize(16),
         color: '#333',
     },
     actionButton: {
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     actionButtonText: {
         color: '#ffffff',
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: responsiveFontSize(16),
     },
 });
 

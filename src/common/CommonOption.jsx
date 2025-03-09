@@ -9,6 +9,7 @@ import {
   Easing,
 } from 'react-native';
 import React, {useRef, useEffect} from 'react';
+import { responsiveFontSize } from '../utility/utility';
 
 const {width} = Dimensions.get('window');
 
@@ -76,7 +77,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: responsiveFontSize(18),
     fontWeight: 'bold',
     textAlign: 'center',
   },

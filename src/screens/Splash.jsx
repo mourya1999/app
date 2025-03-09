@@ -3,7 +3,6 @@ import {Animated, Dimensions, ScrollView, StatusBar, StyleSheet, View} from 'rea
 import IMG from '../assets/img/logo.png';
 import {Colors} from '../assets/AppColors';
 import {useNavigation} from '@react-navigation/native';
-import Onboarding from './onboading/Onboarding';
 
 const {height, width} = Dimensions.get('screen');
 
@@ -20,8 +19,7 @@ const Splash = () => {
 
   setTimeout(() => {
     navigation.navigate('Onboarding');
-    // <Onboarding/>
-  }, 5000);
+  }, 2000);
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={Colors.appColor}  barStyle="light-content"/>
@@ -41,8 +39,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.appColor,
   },
   logo: {
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
   },
 });
 

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {Colors} from '../../assets/AppColors';
 import { useNavigation } from '@react-navigation/native';
+import { responsiveFontSize } from '../../utility/utility';
 
 const {width} = Dimensions.get('window');
 
@@ -144,13 +145,13 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   title: {
-    fontSize: 28,
+    fontSize: responsiveFontSize(28),
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
   },
   subTitle: {
-    fontSize: 18,
+    fontSize: responsiveFontSize(18),
     textAlign: 'center',
     color: '#666',
   },
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
     padding: '10%',
   },
   skipText: {
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
     color: Colors.appColor,
     borderWidth: 2,
     borderColor: Colors.appColor,
@@ -193,6 +194,6 @@ const styles = StyleSheet.create({
   },
   nextButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
   },
 });

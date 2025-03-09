@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
 import {Colors} from '../assets/AppColors';
+import { responsiveFontSize } from '../utility/utility';
 
 const ImagePickerComponent = ({
   title,
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 20,
+    fontSize: responsiveFontSize(20),
     color: '#000',
     marginBottom: 10,
   },
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
     textAlign: 'center',
   },
   image: {
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
   },
   imageName: {
     marginTop: 5,
-    fontSize: 14,
+    fontSize: responsiveFontSize(14),
     color: '#555',
   },
   modalContainer: {
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
   },
   modalOptionText: {
-    fontSize: 18,
+    fontSize: responsiveFontSize(18),
     textAlign: 'center',
     color: '#333',
   },

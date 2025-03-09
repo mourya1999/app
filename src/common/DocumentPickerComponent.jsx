@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import DocumentPicker from 'react-native-document-picker';
 import {Colors} from '../assets/AppColors';
+import { responsiveFontSize } from '../utility/utility';
 
 const DocumentPickerComponent = ({title, buttonTitle, fileName, setFileName, fileUri, setFileUri}) => {
   const pickDocument = async () => {
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    fontSize: 20,
+    fontSize: responsiveFontSize(20),
     color: '#eee',
   },
   buttonContainer: {
@@ -68,12 +69,12 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
   },
   fileName: {
     marginTop: 10,
     color: '#fff',
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
   },
 });
 

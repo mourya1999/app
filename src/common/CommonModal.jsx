@@ -1,6 +1,7 @@
 import React from 'react';
 import {Modal, View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {Colors} from '../assets/AppColors';
+import { responsiveFontSize } from '../utility/utility';
 
 const CommonModal = ({visible, onClose, modalTitle, modalContent}) => {
   return (
@@ -49,11 +50,11 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   closeButtonText: {
-    fontSize: 18,
+    fontSize: responsiveFontSize(18),
     color: '#fff',
   },
   title: {
-    fontSize: 20,
+    fontSize: responsiveFontSize(20),
     fontWeight: 'bold',
     marginBottom: 20,
     color: '#fff',

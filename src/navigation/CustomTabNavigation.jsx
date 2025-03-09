@@ -119,6 +119,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import {useSelector} from 'react-redux';
 import {Colors} from '../assets/AppColors';
+import { responsiveFontSize } from '../utility/utility';
 
 const CustomTabNavigation = ({navigation}) => {
   const roleTab = useSelector(state => state.auth.role || 'TruckOwner'); // Default to "TruckOwner"
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tabText: {
-    fontSize: 12,
+    fontSize: responsiveFontSize(12),
     color: '#A0AEC0',
   },
   activeTabText: {

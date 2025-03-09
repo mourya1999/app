@@ -7,6 +7,7 @@ import { Colors } from '../../../../assets/AppColors';
 import Heading from '../../../../common/Heading';
 import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
+import { responsiveFontSize } from '../../../../utility/utility';
 
 const UpdateDoc = ({ route }) => {
   const token = useSelector(state => state.auth.token);
@@ -200,12 +201,12 @@ const styles = StyleSheet.create({
   },
   uploadedText: {
     color: 'green',
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
     marginTop: 5,
   },
   errorText: {
     color: 'red',
-    fontSize: 14,
+    fontSize: responsiveFontSize(14),
     marginTop: 5,
   },
   uploadedPreview: {
@@ -226,6 +227,6 @@ const styles = StyleSheet.create({
   },
   uploadButtonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
   },
 });

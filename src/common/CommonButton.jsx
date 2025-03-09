@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'; // Ensure you have imported the icon library
 import { Colors } from '../assets/AppColors';
+import { responsiveFontSize } from '../utility/utility';
 
 const CommonButton = ({
   title,
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15, // Adjusted padding for better touch target
   },
   text: {
-    fontSize: 16, // Adjust font size
+    fontSize: responsiveFontSize(16), // Adjust font size
     fontWeight: '700',
     textAlign: 'center',
     fontFamily: 'inter',

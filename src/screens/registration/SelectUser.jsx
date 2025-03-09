@@ -4,6 +4,7 @@ import tailwind from 'twrnc'; // Ensure twrnc is installed and configured
 import { useNavigation } from '@react-navigation/native';
 import CommonButton from '../../common/CommonButton';
 import { Colors } from '../../assets/AppColors';
+import { responsiveFontSize } from '../../utility/utility';
 
 const {width} = Dimensions.get("screen")
 // Predefine image imports since require does not support dynamic paths
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   optionText: {
-    fontSize: 18,
+    fontSize: responsiveFontSize(18),
     fontWeight: 'bold',
     color: '#333333',
     textAlign: 'center',

@@ -19,6 +19,7 @@ import {useSelector} from 'react-redux';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
+import { responsiveFontSize } from '../../utility/utility';
 
 const Orders = () => {
   const [activeIndex, setActiveIndex] = useState(1);
@@ -278,11 +279,11 @@ export default Orders;
 
 const styles = StyleSheet.create({
   nameText: {
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
     fontWeight: 'bold',
   },
   infoText: {
-    fontSize: 14,
+    fontSize: responsiveFontSize(14),
     color: 'gray',
   },
 });

@@ -1,5 +1,6 @@
 import {
   Alert,
+  Dimensions,
   Image,
   KeyboardAvoidingView,
   ScrollView,
@@ -18,7 +19,9 @@ import apiService from '../../redux/apiService';
 import { useDispatch } from 'react-redux';
 import { savePhoneNumber } from '../../redux/AuthSlice';
 import { useNavigation } from '@react-navigation/native';
+import { responsiveFontSize } from '../../utility/utility';
 
+const {height, width} = Dimensions.get("screen")
 const EnterNumber = () => {
   const navigation = useNavigation()
   const dispatch = useDispatch();
@@ -64,10 +67,10 @@ const EnterNumber = () => {
   };
 
   return (
-    <KeyboardAvoidingView
+    <View
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-      <ScrollView style={styles.container}>
+    
         <View>
           <Image
             source={require('../../assets/img/registration/verifyIntro.png')}
@@ -117,10 +120,9 @@ const EnterNumber = () => {
           )}{' '}
           By continuing, I agree to the
           <Text style={styles.linkText}>Terms and Conditions</Text>
-          {'\n'}and <Text style={styles.linkText}>Privacy Policy</Text>.
+          {' '}and <Text style={styles.linkText}>Privacy Policy</Text>.
         </Text>
-      </ScrollView>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
@@ -131,11 +133,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
     paddingHorizontal: 20,
+    height:height
   },
 
   image: {
-    width: 300,
-    height: 450,
+    // width: 300,
+    height: 150,
     resizeMode: 'contain',
     alignItems: 'center',
     display: 'flex',
@@ -144,20 +147,20 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Black',
   },
   title: {
-    fontSize: 30,
+    fontSize: responsiveFontSize(30),
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 10,
     fontFamily: 'Poppins-Black',
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
     color: '#666',
     marginBottom: '15%',
     fontFamily: 'Poppins-Black',
   },
   inputLabel: {
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
     fontWeight: '500',
     color: '#333',
     marginBottom: 5,
@@ -165,7 +168,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Black',
   },
   description: {
-    fontSize: 14,
+    fontSize: responsiveFontSize(14),
     color: '#666',
     marginBottom: 15,
     textAlign: 'center',
@@ -182,7 +185,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   countryCodeInput: {
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
     fontWeight: '500',
     color: '#333',
     width: 50,
@@ -193,7 +196,7 @@ const styles = StyleSheet.create({
   },
   mobileInput: {
     flex: 1,
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
     paddingVertical: 10,
     paddingHorizontal: 10,
     color: '#333',
@@ -207,18 +210,18 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: responsiveFontSize(18),
     fontWeight: 'bold',
     textAlign: 'center',
     fontFamily: 'Poppins-Black',
   },
   termsText: {
-    fontSize: 12,
+    fontSize: responsiveFontSize(12),
     color: '#666',
     textAlign: 'center',
     lineHeight: 18,
     fontFamily: 'Poppins-Black',
-    marginBottom: 30,
+    marginBottom: 20,
   },
   linkText: {
     color: Colors.appColor,

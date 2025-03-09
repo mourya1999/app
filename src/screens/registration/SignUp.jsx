@@ -7,6 +7,7 @@ import { Colors } from '../../assets/AppColors';
 import { statesAndDistricts } from '../StateAndDestrict';
 import apiService from '../../redux/apiService';
 import { useSelector } from 'react-redux';
+import { responsiveFontSize } from '../../utility/utility';
 
 const fields = [
   { label: 'Phone Number', placeholder: 'Enter your phone number', key: 'phone' },
@@ -131,14 +132,14 @@ export default SignUp;
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 24,
+    fontSize: responsiveFontSize(24),
     fontWeight: 'bold',
     color: Colors.textDark,
     marginBottom: 10,
     marginTop: 15,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: responsiveFontSize(14),
     color: Colors.textLight,
     marginBottom: 20,
   },
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
   },
   proceedButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
     fontWeight: 'bold',
   },
 });

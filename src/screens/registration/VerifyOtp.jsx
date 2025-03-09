@@ -17,6 +17,7 @@ import CommonButton from '../../common/CommonButton';
 import { saveOwner, saveRole, saveToken } from '../../redux/AuthSlice';
 import { OtpInput } from "react-native-otp-entry";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { responsiveFontSize } from '../../utility/utility';
 
 const VerifyOtp = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   title: {
-    fontSize: 30,
+    fontSize: responsiveFontSize(30),
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 10,
@@ -168,7 +169,7 @@ const styles = StyleSheet.create({
     color: Colors.textDark,
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: responsiveFontSize(14),
     color: '#666',
     marginBottom: 20,
     textAlign: 'center',
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
     color: Colors.textLight,
   },
   inputLabel: {
-    fontSize: 14,
+    fontSize: responsiveFontSize(14),
     fontWeight: '500',
     color: Colors.textDark,
     marginBottom: 20,
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
   },
   resendText: {
     color: Colors.appColor,
-    fontSize: 14,
+    fontSize: responsiveFontSize(14),
     fontWeight: 'bold',
     textAlign: 'center',
     fontFamily: 'Poppins-Black',
@@ -211,7 +212,7 @@ const styles = StyleSheet.create({
     borderColor: "red", // Default border color
     borderRadius: 10,
     textAlign: 'center',
-    fontSize: 18,
+    fontSize: responsiveFontSize(18),
     fontWeight: 'bold',
     color: '#333',
   },

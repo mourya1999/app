@@ -8,6 +8,7 @@ import { statesAndDistricts } from '../../StateAndDestrict';
 import { Colors } from '../../../assets/AppColors';
 import apiService from '../../../redux/apiService';
 import { saveToken } from '../../../redux/AuthSlice';
+import { responsiveFontSize } from '../../../utility/utility';
 
 const TruckOwner = ({ navigation }) => {
     const dispatch = useDispatch()
@@ -131,14 +132,14 @@ export default TruckOwner;
 
 const styles = StyleSheet.create({
     title: {
-        fontSize: 24,
+        fontSize: responsiveFontSize(24),
         fontWeight: 'bold',
         color: Colors.textDark,
         marginBottom: 10,
         marginTop: 15,
     },
     subtitle: {
-        fontSize: 14,
+        fontSize: responsiveFontSize(14),
         color: Colors.textLight,
         marginBottom: 20,
     },
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
     },
     proceedButtonText: {
         color: '#fff',
-        fontSize: 16,
+        fontSize: responsiveFontSize(16),
         fontWeight: 'bold',
     },
 });

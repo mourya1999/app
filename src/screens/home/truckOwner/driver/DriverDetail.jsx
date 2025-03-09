@@ -14,6 +14,7 @@ import SpaceBetween from '../../../../common/SpaceBetween';
 import tailwind from 'twrnc';
 import {useSelector} from 'react-redux';
 import apiService from '../../../../redux/apiService';
+import { responsiveFontSize } from '../../../../utility/utility';
 
 const DriverDetail = ({route}) => {
   const {item: driver} = route.params;
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.borderColor,
   },
   name: {
-    fontSize: 18,
+    fontSize: responsiveFontSize(18),
     fontWeight: 'bold',
   },
   ratingContainer: {
@@ -182,11 +183,11 @@ const styles = StyleSheet.create({
   },
   star: {
     color: 'gold',
-    fontSize: 18,
+    fontSize: responsiveFontSize(18),
     marginHorizontal: 2,
   },
   label: {
-    fontSize: 14,
+    fontSize: responsiveFontSize(14),
     color: Colors.borderColor,
     fontWeight: '700',
     marginTop: 10,

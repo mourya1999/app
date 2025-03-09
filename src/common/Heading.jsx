@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import tailwind from 'twrnc';
 import SpaceBetween from './SpaceBetween';
 import Octicons from "react-native-vector-icons/Octicons"
+import { responsiveFontSize } from '../utility/utility';
 
 const Heading = ({ heading, leftIcon, rightAction }) => {
   const navigation = useNavigation()
@@ -37,6 +38,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     textAlign: 'center',
     fontWeight: '700',
-    fontSize: 18,
+    fontSize: responsiveFontSize(18),
   },
 });

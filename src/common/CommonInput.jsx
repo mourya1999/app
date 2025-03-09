@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {Colors} from '../assets/AppColors';
+import { responsiveFontSize } from '../utility/utility';
 
 const CommonInput = ({
   value,
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   label: {
-    fontSize: 16,
+    fontSize: responsiveFontSize(16),
     color: Colors.textDark,
     marginBottom: 5,
   },

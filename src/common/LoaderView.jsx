@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Animated, StyleSheet, Text } from 'react-native';
+import { responsiveFontSize } from '../utility/utility';
 
 const LoaderView = () => {
   const scaleValue = useRef(new Animated.Value(1)).current;
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontWeight: '700',
-    fontSize: 26,
+    fontSize: responsiveFontSize(26),
     color: '#fff',
   },
 });
