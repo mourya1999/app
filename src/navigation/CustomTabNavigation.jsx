@@ -122,7 +122,7 @@ import {Colors} from '../assets/AppColors';
 import { responsiveFontSize } from '../utility/utility';
 
 const CustomTabNavigation = ({navigation}) => {
-  const roleTab = useSelector(state => state.auth.role || 'TruckOwner'); // Default to "TruckOwner"
+  const roleTab = useSelector(state => state.auth.role); // Default to "TruckOwner"
   const [activeTab, setActiveTab] = useState('Home');
 
   const handleTabPress = (tabName, screenName) => {

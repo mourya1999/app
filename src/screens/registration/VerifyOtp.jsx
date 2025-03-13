@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Alert,
   StyleSheet,
@@ -9,19 +9,19 @@ import {
   ToastAndroid,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Colors } from '../../assets/AppColors';
+import {Colors} from '../../assets/AppColors';
 import SpaceBetween from '../../common/SpaceBetween';
 import apiService from '../../redux/apiService';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import CommonButton from '../../common/CommonButton';
-import { saveOwner, saveRole, saveToken } from '../../redux/AuthSlice';
-import { OtpInput } from "react-native-otp-entry";
+import {saveOwner, saveRole, saveToken, setLoginUser} from '../../redux/AuthSlice';
+import {OtpInput} from 'react-native-otp-entry';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { responsiveFontSize } from '../../utility/utility';
+import {responsiveFontSize} from '../../utility/utility';
 
-const VerifyOtp = ({ navigation }) => {
+const VerifyOtp = ({navigation}) => {
   const dispatch = useDispatch();
-  const oldNum = useSelector((state) => state.auth.phoneNumber);
+  const oldNum = useSelector(state => state.auth.phoneNumber);
   const [timer, setTimer] = useState(210);
   const [enteredOtp, setEnteredOtp] = useState(''); // State to store the OTP
 
@@ -32,14 +32,14 @@ const VerifyOtp = ({ navigation }) => {
       //   Alert.alert('Error', 'Please enter a valid 4-digit OTP.');
       //   return;
       // }
-// owner 9616027387
-// driver 7800106847
+      // owner 9616027387
+      // driver 7800106847
       const requestData = {
-        phone: oldNum, 
+        phone: oldNum,
         otp: enteredOtp,
         source: 'truck_owner_app',
       };
-      console.log("Request Data:", requestData);
+      console.log('Request Data:', requestData);
 
       const response = await apiService({
         endpoint: 'truck_owner/verify/otp',
@@ -47,33 +47,45 @@ const VerifyOtp = ({ navigation }) => {
         data: requestData,
       });
 
-      console.log("API Response:", response);
+      console.log('API Response:', response);
+      dispatch(setLoginUser(response.data))
       dispatch(saveToken(response.access_token));
-      AsyncStorage.setItem("storeToken", response.access_token)
-      if (response.user_type === "new") {
-        Alert.alert('Success', `New user ${response?.message}` || 'OTP verified successfully!');
+      AsyncStorage.setItem('storeToken', response.access_token);
+      if (response.user_type === 'new') {
+        Alert.alert(
+          'Success',
+          `New user ${response?.message}` || 'OTP verified successfully!',
+        );
         navigation.navigate('SelectUser');
-      } else if (response.user_type === "old" && response.data?.role_name === "Driver") {
-        navigation.navigate("AppTabs");
-        dispatch(saveRole(response.data?.role_name))
-      } else if (response.user_type === "old" && response.data?.role_name === "Truck Owner") {
-        navigation.navigate("AppTabs");
+      } else if (
+        response.user_type === 'old' &&
+        response.data?.role_name === 'Driver'
+      ) {
+        navigation.navigate('AppTabs');
+        dispatch(saveRole(response.data?.role_name));
+      } else if (
+        response.user_type === 'old' &&
+        response.data?.role_name === 'Truck Owner'
+      ) {
+        navigation.navigate('AppTabs');
       }
     } catch (error) {
       console.error('Error verifying OTP:', error);
-      // Alert.alert('Error', error.message || 'Something went wrong. Please try again.');
+      Alert.alert(
+        'Error',
+        error.message || 'Something went wrong. Please try again.',
+      );
     }
   };
 
   // Handle timer countdown
   useEffect(() => {
     if (timer > 0) {
-      const interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
+      const interval = setInterval(() => setTimer(prev => prev - 1), 1000);
       return () => clearInterval(interval);
     }
   }, [timer]);
 
-  
   return (
     <View style={styles.container}>
       <Image
@@ -82,48 +94,56 @@ const VerifyOtp = ({ navigation }) => {
       />
       <Text style={styles.title}>Please Enter{'\n'}OTP Verification</Text>
       <Text style={styles.subtitle}>
-        Code was sent to {oldNum ? oldNum : "+91 9999 999**9"}{' '}
-        <Text onPress={() => navigation.navigate('EnterNumber')} style={styles.linkText}>
+        Code was sent to {oldNum ? oldNum : '+91 9999 999**9'}{' '}
+        <Text
+          onPress={() => navigation.navigate('EnterNumber')}
+          style={styles.linkText}>
           edit
         </Text>
       </Text>
       <Text style={styles.inputLabel}>
         This code will expire in{' '}
-        <Text style={{ fontWeight: '900' }}>{Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, '0')}</Text>
+        <Text style={{fontWeight: '900'}}>
+          {Math.floor(timer / 60)}:{(timer % 60).toString().padStart(2, '0')}
+        </Text>
       </Text>
 
       {/* OTP Input Field */}
-      <OtpInput
-        numberOfDigits={4}
-        focusColor={Colors.appColor}
-        autoFocus={false}
-        hideStick={true}
-        placeholder=""
-        blurOnFilled={true}
-        disabled={false}
-        type="numeric"
-        secureTextEntry={false}
-        focusStickBlinkingDuration={500}
-        onFocus={() => console.log("Focused")}
-        onBlur={() => console.log("Blurred")}
-        onTextChange={(text) => console.log(`Current OTP: ${text}`)}
-        onFilled={(text) => {
-          setEnteredOtp(text); // Update state with the complete OTP
-          handleOtpSubmit(); // Auto-submit when OTP is filled
-        }}
-        textInputProps={{
-          accessibilityLabel: "One-Time Password",
-        }}
-        style={styles.otpContainer} // Style for the container
-        textInputStyle={styles.otpInput}
-      />
+      <View style={{width: '70%', marginBottom: 15}}>
+        <OtpInput
+          numberOfDigits={4}
+          focusColor={Colors.appColor}
+          autoFocus={false}
+          hideStick={true}
+          placeholder=""
+          blurOnFilled={true}
+          disabled={false}
+          type="numeric"
+          secureTextEntry={false}
+          focusStickBlinkingDuration={500}
+          onFocus={() => console.log('Focused')}
+          onBlur={() => console.log('Blurred')}
+          onTextChange={text => console.log(`Current OTP: ${text}`)}
+          onFilled={text => {
+            setEnteredOtp(text);
+          }}
+          textInputProps={{
+            accessibilityLabel: 'One-Time Password',
+          }}
+          style={styles.otpContainer}
+          textInputStyle={styles.otpInput}
+        />
+      </View>
 
       {/* Resend Section */}
       <SpaceBetween>
-        <Text style={{ color: Colors.textDark }}>Didn't receive OTP?</Text>
-        <TouchableOpacity onPress={() => setTimer(210)} style={styles.resendContainer}>
+        <Text style={{color: Colors.textDark}}>Didn't receive OTP?</Text>
+        <TouchableOpacity
+          onPress={() => setTimer(210)}
+          style={styles.resendContainer}>
           <Text style={styles.resendText}>
-            <Ionicons name="refresh" size={14} color={Colors.appColor} /> Refresh
+            <Ionicons name="refresh" size={14} color={Colors.appColor} />{' '}
+            Refresh
           </Text>
         </TouchableOpacity>
       </SpaceBetween>
@@ -131,7 +151,7 @@ const VerifyOtp = ({ navigation }) => {
       {/* Verify Button */}
       <CommonButton
         textColor="#fff"
-        buttonStyle={{ marginTop: '10%' }}
+        buttonStyle={{marginTop: '10%'}}
         backgroundColor={Colors.appColor}
         title="Verify OTP"
         onPress={handleOtpSubmit}
@@ -208,8 +228,8 @@ const styles = StyleSheet.create({
   otpInput: {
     width: 70,
     height: 70,
-    borderWidth: 2,
-    borderColor: "red", // Default border color
+    borderWidth: 1,
+    borderColor: 'red', // Default border color
     borderRadius: 10,
     textAlign: 'center',
     fontSize: responsiveFontSize(18),

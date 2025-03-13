@@ -137,33 +137,38 @@ const HomeStackNavigator = () => {
   }, []);
   return (
     <HomeStack.Navigator>
-      <HomeStack.Screen
+      {/* <HomeStack.Screen
         name="Splash"
         component={Splash}
         options={{headerShown: false}}
       />
-      {!hasSeenOnboarding && !token ? (
-        <HomeStack.Screen
-          name="Onboarding"
-          component={() => (
-            <Onboarding
-              onComplete={async () => {
-                await AsyncStorage.setItem('hasSeenOnboarding', 'true');
-                setHasSeenOnboarding(true);
-              }}
-            />
-          )}
-          options={{headerShown: false}}
-        />
-      ) : (
-        <HomeStack.Screen
-          name="EnterNumber"
-          component={EnterNumber}
-          options={{headerShown: false}}
-        />
-      )}
+      <HomeStack.Screen
+        name="Onboarding"
+        component={Onboarding}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="EnterNumber"
+        component={EnterNumber}
+        options={{headerShown: false}}
+      /> */}
       {!token ? (
         <>
+          <HomeStack.Screen
+            name="Splash"
+            component={Splash}
+            options={{headerShown: false}}
+          />
+          <HomeStack.Screen
+            name="Onboarding"
+            component={Onboarding}
+            options={{headerShown: false}}
+          />
+          <HomeStack.Screen
+            name="EnterNumber"
+            component={EnterNumber}
+            options={{headerShown: false}}
+          />
           <HomeStack.Screen
             name="SelectUser"
             component={SelectUser}
@@ -174,9 +179,19 @@ const HomeStackNavigator = () => {
             component={VerifyOtp}
             options={{headerShown: false}}
           />
-          <HomeStack.Screen
+          {/* <HomeStack.Screen
             name="EnterNumber"
             component={EnterNumber}
+            options={{headerShown: false}}
+          /> */}
+          <HomeStack.Screen
+            name="TruckOwner"
+            component={TruckOwner}
+            options={{headerShown: false}}
+          />
+          <HomeStack.Screen
+            name="Driver"
+            component={Driver}
             options={{headerShown: false}}
           />
         </>

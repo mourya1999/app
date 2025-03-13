@@ -11,26 +11,26 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
-import { Colors } from '../../assets/AppColors';
+import React, {useState} from 'react';
+import {Colors} from '../../assets/AppColors';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import apiService from '../../redux/apiService';
-import { useDispatch } from 'react-redux';
-import { savePhoneNumber } from '../../redux/AuthSlice';
-import { useNavigation } from '@react-navigation/native';
-import { responsiveFontSize } from '../../utility/utility';
+import {useDispatch} from 'react-redux';
+import {savePhoneNumber} from '../../redux/AuthSlice';
+import {useNavigation} from '@react-navigation/native';
+import {responsiveFontSize} from '../../utility/utility';
 
-const {height, width} = Dimensions.get("screen")
+const {height, width} = Dimensions.get('screen');
 const EnterNumber = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const [number, setNumber] = useState('');
   const [isChecked, setIsChecked] = useState(false);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const handleSendOtp = async () => {
-    setLoading(true)
+    setLoading(true);
     const data = {
       //// driver
       // phone: "7800106847",
@@ -40,7 +40,7 @@ const EnterNumber = () => {
     };
     if (!isChecked) {
       Alert.alert('please check terms and condition');
-      return
+      return;
     }
     try {
       const res = await apiService({
@@ -49,7 +49,7 @@ const EnterNumber = () => {
         data,
       });
       dispatch(savePhoneNumber(number));
-      setLoading(false)
+      setLoading(false);
       ToastAndroid.show(
         res.message || 'OTP sent successfully!',
         ToastAndroid.SHORT,
@@ -57,7 +57,7 @@ const EnterNumber = () => {
 
       navigation.navigate('VerifyOtp', number);
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       console.error('Error sending OTP:', error);
       ToastAndroid.show(
         error.message || 'Failed to send OTP. Please try again.',
@@ -70,58 +70,55 @@ const EnterNumber = () => {
     <View
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-    
-        <View>
-          <Image
-            source={require('../../assets/img/registration/verifyIntro.png')}
-            style={styles.image}
+      <View>
+        <Image
+          source={require('../../assets/img/registration/verifyIntro.png')}
+          style={styles.image}
+        />
+      </View>
+      <View>
+        <Text style={styles.title}>Welcome to{'\n'}Hindustan Truckers</Text>
+        <Text style={styles.subtitle}>
+          Get best in Class Transport Service with easy booking and User
+          Friendly experience
+        </Text>
+      </View>
+      <View>
+        <Text style={styles.inputLabel}>Please Enter your Mobile Number</Text>
+        <Text style={styles.description}>We will send you a 4 digit OTP</Text>
+      </View>
+      <KeyboardAvoidingView>
+        <View style={styles.inputContainer}>
+          <TextInput style={styles.countryCodeInput} value="+91" />
+          <TextInput
+            style={styles.mobileInput}
+            placeholder="Mobile Number"
+            keyboardType="numeric"
+            value={number}
+            onChangeText={setNumber}
           />
         </View>
-
-        <View>
-          <Text style={styles.title}>Welcome to{'\n'}Hindustan Truckers</Text>
-          <Text style={styles.subtitle}>
-            Get best in Class Transport Service with easy booking and User
-            Friendly experience
-          </Text>
-        </View>
-
-        <View>
-          <Text style={styles.inputLabel}>Please Enter your Mobile Number</Text>
-          <Text style={styles.description}>We will send you a 4 digit OTP</Text>
-        </View>
-
-        <KeyboardAvoidingView>
-          <View style={styles.inputContainer}>
-            <TextInput style={styles.countryCodeInput} value="+91" />
-            <TextInput
-              style={styles.mobileInput}
-              placeholder="Mobile Number"
-              keyboardType="numeric"
-              value={number}
-              onChangeText={setNumber}
-            />
-          </View>
-        </KeyboardAvoidingView>
-        <TouchableOpacity style={styles.button} onPress={handleSendOtp}>
-          <Text style={styles.buttonText}>{loading ? "Loading..." :"Send OTP"}</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.termsText}>
-          {isChecked ? (
-            <AntDesign name="checksquare" size={18} color={Colors.appColor} />
-          ) : (
-            <Fontisto
-              name={'checkbox-passive'}
-              size={14}
-              color={Colors.appColor}
-              onPress={() => setIsChecked(true)}
-            />
-          )}{' '}
-          By continuing, I agree to the
-          <Text style={styles.linkText}>Terms and Conditions</Text>
-          {' '}and <Text style={styles.linkText}>Privacy Policy</Text>.
+      </KeyboardAvoidingView>
+      <Text style={styles.termsText}>
+        {isChecked ? (
+          <AntDesign name="checksquare" size={18} color={Colors.appColor} />
+        ) : (
+          <Fontisto
+            name={'checkbox-passive'}
+            size={14}
+            color={Colors.appColor}
+            onPress={() => setIsChecked(true)}
+          />
+        )}{' '}
+        By continuing, I agree to the
+        <Text style={styles.linkText}>Terms and Conditions</Text> and{' '}
+        <Text style={styles.linkText}>Privacy Policy</Text>.
+      </Text>
+      <TouchableOpacity style={styles.button} onPress={handleSendOtp}>
+        <Text style={styles.buttonText}>
+          {loading ? 'Loading...' : 'Send OTP'}
         </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -133,7 +130,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
     paddingHorizontal: 20,
-    height:height
+    height: height,
   },
 
   image: {

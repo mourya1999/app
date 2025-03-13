@@ -17,8 +17,8 @@ const UpdateDoc = ({ route }) => {
   const [uploadedImages, setUploadedImages] = useState({
     RCDocument: null,
     TruckImage: null,
-    TruckInsurance: null,
-    PermitPermissionFile: null,
+    InsuranceFiles: null,
+    PermitPermission: null,
     PollutionCertificate: null,
     OtherDocument: null,
   });
@@ -173,8 +173,8 @@ const UpdateDoc = ({ route }) => {
       <ScrollView style={styles.containerView}>
         {renderUploadSection('RCDocument', 'RC Document', docStatus.RCDocument)}
         {renderUploadSection('TruckImage', 'Truck Image', docStatus.TruckImage)}
-        {renderUploadSection('TruckInsurance', 'Truck Insurance', docStatus.TruckInsuranceMessgae)}
-        {renderUploadSection('PermitPermissionFile', 'Permit File', docStatus.PermitPermissionFileMessage)}
+        {renderUploadSection('InsuranceFiles', 'Truck Insurance', docStatus.InsuranceFilesMessgae)}
+        {renderUploadSection('PermitPermission', 'Permit File', docStatus.PermitPermissionMessage)}
         {renderUploadSection('PollutionCertificate', 'Pollution Cert.', docStatus.PollutionCertificateMessage)}
         {renderUploadSection('OtherDocument', 'Other Document', docStatus.OtherDocumentMessage)}
       </ScrollView>

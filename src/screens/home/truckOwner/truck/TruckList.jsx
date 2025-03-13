@@ -31,9 +31,11 @@ const TruckList = () => {
   const [loading, setLoading] = useState(true);
   const [drivers, setDrivers] = useState();
   const [truckId, setTruckId] = useState();
+  const [refreshing, setRefreshing] = useState(false); // State for refreshing
 
   const getTruckList = async () => {
     try {
+      if (!refreshing) setLoading(true); // Only show loading indicator if not refreshing
       const res = await apiService({
         endpoint: 'truck_owner/trucks_list',
         method: 'POST',
@@ -41,14 +43,13 @@ const TruckList = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('truck list API Response:', res.data);
-
-      // Set the data in the state
-      setTrucks(res.data || []); // Ensure data is an array even if API returns null
-      setLoading(false); // Stop loading
+      console.log("truck list : ", res.data)
+      setTrucks(res.data || []);
     } catch (error) {
       console.log('Error fetching truck list:', error);
-      setLoading(false); // Stop loading in case of error
+    } finally {
+      setLoading(false);
+      setRefreshing(false); // Stop refreshing state
     }
   };
 
@@ -103,40 +104,36 @@ const TruckList = () => {
   // Render each truck item
   const renderItem = ({item}) => (
     <View
-      style={tailwind`bg-[#fff] w-[94%] shadow h-auto mt-3 mx-3  rounded-lg`}>
-      {/* First Row */}
-      <SpaceBetween style={tailwind`p-3`}>
+      style={tailwind`bg-white w-[94%] shadow-lg h-auto mt-3 mx-3 rounded-2xl border border-gray-200`}>
+      <SpaceBetween style={tailwind`p-2`}>
         {/* Left Section */}
         <View style={tailwind`w-[50%]`}>
           <SpaceBetween>
             <View style={styles.labelText}>
               <SpaceBetween padding={0} justify="" style={tailwind`gap-1`}>
-                <Text>Status : </Text>
+                <Text style={tailwind`text-gray-700 font-semibold`}>
+                  Status :
+                </Text>
                 {item.Status === 0 ? (
                   <>
-                    <Octicons name="skip" size={12} color={'red'} />
-                    <Text
-                      style={{color: '#000', fontSize: responsiveFontSize(12)}}>
+                    <Octicons name="skip" size={14} color={'#e53e3e'} />
+                    <Text style={tailwind`text-black text-sm`}>
                       Not Verified
                     </Text>
                   </>
                 ) : (
                   <>
-                    <Octicons name="skip" size={12} color={'green'} />{' '}
-                    <Text
-                      style={{color: '#000', fontSize: responsiveFontSize(12)}}>
-                      Verified
-                    </Text>
+                    <Octicons name="skip" size={14} color={'#38a169'} />
+                    <Text style={tailwind`text-black text-sm`}>Verified</Text>
                   </>
                 )}
               </SpaceBetween>
 
-              <Text style={[styles.labelText, {color: Colors.textDark}]}>
-                Date:{' '}
-                <Text>{moment(item.created_at).format('DD-MM-YYYY')}</Text>
+              <Text style={tailwind`text-gray-600 mt-1`}>
+                Date: {moment(item.created_at).format('DD-MM-YYYY')}
               </Text>
-              <Text style={[styles.labelText, {color: Colors.textDark}]}>
-                Route:<Text>{item.OriginRoute}</Text>
+              <Text style={tailwind`text-gray-600 mt-1`}>
+                Route: {item.OriginRoute}
               </Text>
               <TouchableOpacity
                 onPress={() => {
@@ -144,14 +141,11 @@ const TruckList = () => {
                     navigation.navigate('UpdateDoc', {item});
                   }
                 }}>
-                <Text style={[styles.labelText, {color: Colors.textDark}]}>
-                  Documentation Status:
+                <Text style={tailwind`text-gray-600 mt-1`}>
+                  Documentation Status:{' '}
                   <Text
                     style={{
-                      color:
-                        item.document_status === 0
-                          ? Colors.pendingolor
-                          : 'green',
+                      color: item.document_status === 0 ? '#e53e3e' : '#38a169',
                     }}>
                     {item.document_status === 0 ? 'Pending' : 'Completed'}
                   </Text>
@@ -160,27 +154,25 @@ const TruckList = () => {
             </View>
           </SpaceBetween>
         </View>
+
         {/* Right Section */}
         <View
-          style={tailwind`w-[50%] border border-gray-300 rounded-lg overflow-hidden`}>
+          style={tailwind`w-[50%] rounded-xl overflow-hidden border border-gray-300`}>
           <Image
             style={tailwind`w-full h-32`}
             source={{
               uri: `https://api.hindustantruckers.com/storage/truck_images/${item.TruckImage}`,
             }}
-            resizeMode="cover" // Ensure the image fits properly
+            resizeMode="cover"
           />
         </View>
       </SpaceBetween>
-
       {/* Second Row */}
-      <SpaceBetween style={tailwind`p-3`}>
+      <SpaceBetween style={tailwind`px-4`}>
         {/* Left Column */}
         <View>
-          <Text style={[styles.labelText, {color: Colors.textLight}]}>
-            Width
-          </Text>
-          <Text style={[styles.valueText, {color: Colors.textDark}]}>
+          <Text style={tailwind`text-gray-500 font-semibold mb-1`}>Width</Text>
+          <Text style={tailwind`text-gray-700 flex-row items-center`}>
             <MaterialIcons
               name="width-wide"
               size={14}
@@ -188,10 +180,11 @@ const TruckList = () => {
             />
             {item.Width} Feets
           </Text>
-          <Text style={[styles.labelText, {color: Colors.textLight}]}>
+
+          <Text style={tailwind`text-gray-500 font-semibold mt-3 mb-1`}>
             Capacity
           </Text>
-          <Text style={[styles.valueText, {color: Colors.textDark}]}>
+          <Text style={tailwind`text-gray-700 flex-row items-center`}>
             <MaterialIcons
               name="reduce-capacity"
               size={14}
@@ -200,19 +193,19 @@ const TruckList = () => {
             {item.Capacity} {item.CapacityUnit}
           </Text>
         </View>
+
         {/* Right Column */}
         <View>
-          <Text style={[styles.labelText, {color: Colors.textLight}]}>
-            Height
-          </Text>
-          <Text style={[styles.valueText, {color: Colors.textDark}]}>
+          <Text style={tailwind`text-gray-500 font-semibold mb-1`}>Height</Text>
+          <Text style={tailwind`text-gray-700 flex-row items-center`}>
             <MaterialIcons name="height" size={14} color={Colors.appColor} />{' '}
             {item.Height} Feets
           </Text>
-          <Text style={[styles.labelText, {color: Colors.textLight}]}>
+
+          <Text style={tailwind`text-gray-500 font-semibold mt-3 mb-1`}>
             Expected Price
           </Text>
-          <Text style={[styles.valueText, {color: Colors.textDark}]}>
+          <Text style={tailwind`text-gray-700 flex-row items-center`}>
             <MaterialIcons
               name="currency-rupee"
               size={14}
@@ -222,14 +215,11 @@ const TruckList = () => {
           </Text>
         </View>
       </SpaceBetween>
-
       {/* Divider */}
       <View style={tailwind`border-b border-gray-300 mx-3`} />
-
       {/* Assign Driver Button */}
-      <SpaceBetween justify="space-between" style={tailwind`p-3`}>
-        <Text
-          style={[tailwind`text-gray-500`, {fontSize: responsiveFontSize(12)}]}>
+      <SpaceBetween justify="space-between" style={tailwind`px-4 py-2`}>
+        <Text style={tailwind`text-gray-500 text-sm`}>
           {item.TruckType} | {item.TruckNumber}
         </Text>
         <TouchableOpacity
@@ -237,18 +227,17 @@ const TruckList = () => {
             setTruckId(item.id);
             setAssignDriver(true);
           }}
-          style={[
-            {backgroundColor: Colors.appColor},
-            tailwind`px-4 py-2 rounded-sm`,
-          ]}>
-          <Text style={[styles.buttonText, {color: '#fff'}]}>
-            Assign Driver
-          </Text>
+          style={tailwind`bg-[${Colors.appColor}] px-5 py-2 rounded-md shadow`}>
+          <Text style={tailwind`text-white font-semibold`}>Assign Driver</Text>
         </TouchableOpacity>
       </SpaceBetween>
     </View>
   );
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    getTruckList(); // Trigger data fetching on refresh
+  };
   return (
     <View>
       {/* Header */}
@@ -271,9 +260,11 @@ const TruckList = () => {
 
       {/* FlatList to display trucks */}
       <FlatList
-        data={trucks} // Pass the array of trucks
-        keyExtractor={item => item.id.toString()} // Use unique ID as the key
-        renderItem={renderItem} // Render each item
+        data={trucks}
+        keyExtractor={item => item.id.toString()}
+        renderItem={renderItem}
+        onRefresh={onRefresh} // Add refresh prop
+        refreshing={refreshing} // Pass refreshing state
         ListEmptyComponent={
           !loading && (
             <Text style={tailwind`text-center text-gray-500 mt-5`}>
@@ -281,10 +272,8 @@ const TruckList = () => {
             </Text>
           )
         }
-        style={[tailwind`bg-white`, {borderRadius: 10}]} // Rounded corners
-        contentContainerStyle={[
-          tailwind`pb-20`, // Center content if empty
-        ]}
+        style={[tailwind`bg-white`, {borderRadius: 10}]}
+        contentContainerStyle={[tailwind`pb-20`]}
       />
 
       {/* Loading Indicator */}

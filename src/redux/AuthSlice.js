@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   phoneNumber: '', 
   role:'',
-  token:''
+  token:'',
+  loginUser:''
 };
 
 const phoneSlice = createSlice({
@@ -29,9 +30,12 @@ const phoneSlice = createSlice({
       // Update the state with the payload
       return { ...state, ...action.payload };
     },
+    setLoginUser:(state, action) =>{
+      state.loginUser = action.payload
+    }
   },
 });
 
-export const { savePhoneNumber, clearPhoneNumber, saveRole , saveToken,setUserDetails, clearToken } = phoneSlice.actions;
+export const { savePhoneNumber, clearPhoneNumber, saveRole , saveToken,setUserDetails, clearToken, setLoginUser } = phoneSlice.actions;
 
 export default phoneSlice.reducer;

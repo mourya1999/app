@@ -15,9 +15,11 @@ import CommonInput from '../../../../common/CommonInput';
 import CommonDropdown from '../../../../common/CommonDropdown';
 import apiService from '../../../../redux/apiService';
 import {useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 const TruckRegistration = () => {
   const token = useSelector(state => state.auth.token);
+  const navigation = useNavigation()
   const [step, setStep] = useState(1);
   const progress = useRef(new Animated.Value(1)).current;
   const [selectedUnit, setSelectedUnit] = useState('Ton');
@@ -31,13 +33,13 @@ const TruckRegistration = () => {
     Height: '',
     Width: '',
     OriginRoute: '',
-    AllRoutes: '',
-    DestinationRoute: '',
+    // AllRoutes: '',
+    // DestinationRoute: '',
     ModelYear: '',
     ChassisNumber: '',
     PSTNumber: '',
     GSTNumber: '',
-    CapacityUnit:selectedUnit
+    Unit:selectedUnit
   });
   const [selectedTruckName, setSelectedTruckName] = useState("")
 
@@ -100,7 +102,6 @@ const TruckRegistration = () => {
       'Height',
       'Width',
       'OriginRoute',
-      'DestinationRoute',
       'ModelYear',
       'ChassisNumber',
       'PSTNumber',
@@ -153,10 +154,11 @@ const TruckRegistration = () => {
 
   // Handle Form Submission
   const handleSubmit = async () => {
-    // if (!validateForm()) {
-    //     return;
-    // }
+    if (!validateForm()) {
+        return;
+    }
     console.log("formdata ", formData)
+    
     try {
       const res = await apiService({
         endpoint: 'truck_owner/truck/registration', // Replace with your actual endpoint
@@ -168,6 +170,7 @@ const TruckRegistration = () => {
       });
       console.log('API Response post:', res.data);
       ToastAndroid.show('Truck registered successfully!', ToastAndroid.SHORT);
+      navigation.navigate('TruckList')
     } catch (error) {
       console.log('Add truck error:', error);
       ToastAndroid.show(
@@ -311,12 +314,12 @@ console.log(truckTypes);
                 value={formData.TruckNumber}
                 onChangeText={text => handleInputChange('TruckNumber', text)}
               />
-              <CommonInput
+              {/* <CommonInput
                 label={'DestinationRoute *'}
                 placeholder={'Enter DestinationRoute'}
                 value={formData.DestinationRoute}
                 onChangeText={text => handleInputChange('DestinationRoute', text)}
-              />
+              /> */}
               <CommonInput
                 label={'Model Year *'}
                 placeholder={'Enter Model Year'}
@@ -337,23 +340,17 @@ console.log(truckTypes);
                 onChangeText={text => handleInputChange('PSTNumber', text)}
               />
               <CommonInput
-                label={'OriginRoute *'}
-                placeholder={'Enter OriginRoute'}
-                value={formData.OriginRoute}
-                onChangeText={text => handleInputChange('OriginRoute', text)}
-              />
-              <CommonInput
                 label={'GST Number *'}
                 placeholder={'Enter GST Number'}
                 value={formData.GSTNumber}
                 onChangeText={text => handleInputChange('GSTNumber', text)}
               />
-              <CommonInput
+              {/* <CommonInput
                 label={'All Routes *'}
                 placeholder={'Enter All Route'}
                 value={formData.AllRoutes}
                 onChangeText={text => handleInputChange('AllRoutes', text)}
-              />
+              /> */}
             </View>
           </ScrollView>
         )}

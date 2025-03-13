@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {Text, View, Image, TouchableOpacity, ScrollView, Alert} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import tw from 'twrnc';
@@ -6,17 +6,34 @@ import {Colors} from '../../assets/AppColors';
 import {useDispatch, useSelector} from 'react-redux';
 import { clearToken } from '../../redux/AuthSlice';
 import apiService from '../../redux/apiService';
+import { useProfile } from '../../redux/ProfileContext';
 
 const Account = ({navigation}) => {
-  const user = useSelector(state => state.auth);
   const token = useSelector(state=>state.auth.token)
   const dispatch = useDispatch()
-  const [editProModal, setEditProModal] = useState()
-  
+  const [user, setUser] = useState({})
   const handleLogout = () => {
     dispatch(clearToken())
   };
+  const getProfileData = async () => {
+    try {
+      const res = await apiService({
+        endpoint: 'truck_owner/get/profile',
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('profile data Response:', res.data[0]);
+      setUser(res.data[0]);
+    } catch (error) {
+      console.error('Company Error:', error);
+    }
+  };
 
+  useEffect(() => {
+    getProfileData();
+  }, []);
 
   const handleDeleteAccount = async () => {
     Alert.alert(
@@ -70,9 +87,9 @@ const Account = ({navigation}) => {
           />
           <View style={tw`ml-4 flex-1`}>
             <Text style={tw`text-white text-lg font-bold`}>
-              {user.UserName || 'N/A'}
+              {user?.UserName || 'N/A'}
             </Text>
-            <Text style={tw`text-white text-sm`}>{user.phone || 'N/A'}</Text>
+            <Text style={tw`text-white text-sm`}>{user?.phone || 'N/A'}</Text>
           </View>
           <TouchableOpacity onPress={() => navigation.navigate('EditProfile')}>
             <Feather name="edit" size={24} color="white" />

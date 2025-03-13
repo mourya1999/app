@@ -19,7 +19,6 @@ const DriverList = () => {
   const [drivers, setDrivers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch truck list from API
   const getDriver = async () => {
     try {
       const res = await apiService({
@@ -40,7 +39,6 @@ const DriverList = () => {
     }
   };
 
-  // Fetch data when the component mounts or when the token changes
   useEffect(() => {
     getDriver();
   }, []);

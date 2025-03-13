@@ -1,13 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import Heading from '../../common/Heading';
 import {responsiveFontSize} from '../../utility/utility';
 import {Colors} from '../../assets/AppColors';
+import { useProfile } from '../../redux/ProfileContext';
+import apiService from '../../redux/apiService';
 
 const Personal = () => {
-  const profileData = useSelector(state => state.auth);
-  console.log("personal : ", profileData)
+  const token = useSelector(state=>state.auth.token)
+  const [profileData, setProfileData] = useState({})
+
+  const getProfileData = async () => {
+    try {
+      const res = await apiService({
+        endpoint: 'truck_owner/get/profile',
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('personal data Response:', res.data[0]);
+      setProfileData(res.data[0]);
+    } catch (error) {
+      console.error('Company Error:', error);
+    }
+  };
+  useEffect(()=>{
+    getProfileData()
+  },[token])
   return (
     <View>
       <Heading
@@ -30,7 +51,7 @@ const Personal = () => {
         </Text>
         <Text style={styles.title}>Email Address</Text>
         <Text style={[styles.nameText, {fontSize: responsiveFontSize(14)}]}>
-          {profileData?.Email || 'example@gmail.com'}
+          {profileData?.UserEmail || 'example@gmail.com'}
         </Text>
         <Text style={styles.title}>Mobile No.</Text>
         <Text style={[styles.nameText, {fontSize: responsiveFontSize(12)}]}>

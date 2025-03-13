@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -8,21 +8,21 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import Heading from '../../common/Heading';
-import { responsiveFontSize } from '../../utility/utility';
-import { Colors } from '../../assets/AppColors';
+import {responsiveFontSize} from '../../utility/utility';
+import {Colors} from '../../assets/AppColors';
 import CommonInput from '../../common/CommonInput';
 import CommonButton from '../../common/CommonButton';
 import tailwind from 'twrnc';
 import apiService from '../../redux/apiService';
 import ImagePickerComponent from '../../common/ImagePickerComponent';
-import  MaterialIcons  from 'react-native-vector-icons/MaterialIcons';
-import { useNavigation } from '@react-navigation/native';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useNavigation} from '@react-navigation/native';
 
 const BankDetails = () => {
   const token = useSelector(state => state.auth.token);
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const [bankDetailData, setBankDetailData] = useState({});
   const [input, setInput] = useState({
     bank_name: '',
@@ -93,9 +93,8 @@ const BankDetails = () => {
         data,
       });
       Alert.alert('Success', 'Bank details updated successfully!');
-      navigation.goBack()
+      navigation.goBack();
       console.log('Update Response:', res.data);
-      
     } catch (error) {
       console.error('Update Error:', error);
       Alert.alert('Error', 'Failed to update bank details.');
@@ -104,7 +103,11 @@ const BankDetails = () => {
 
   return (
     <>
-      <Heading leftIcon={true} heading={'Bank Details'} rightAction={<Text></Text>} />
+      <Heading
+        leftIcon={true}
+        heading={'Bank Details'}
+        rightAction={<Text></Text>}
+      />
       <ScrollView style={tailwind`px-2 py-3`}>
         <CommonInput
           placeholder={'Bank Name'}
@@ -141,13 +144,14 @@ const BankDetails = () => {
             setImgName={setImgName}
           />
         )}
-
-        <CommonButton
-          title={'Submit'}
-          textColor={'#fff'}
-          backgroundColor={Colors.appColor}
-          onPress={handleSubmit}
-        />
+        {bankDetailData.verified_status !== 0 && (
+          <CommonButton
+            title={'Submit'}
+            textColor={'#fff'}
+            backgroundColor={Colors.appColor}
+            onPress={handleSubmit}
+          />
+        )}
       </ScrollView>
     </>
   );

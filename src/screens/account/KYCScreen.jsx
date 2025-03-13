@@ -7,6 +7,7 @@ import CommonInput from '../../common/CommonInput';
 import ImagePickerComponent from '../../common/ImagePickerComponent';
 import apiService from '../../redux/apiService';
 import { Colors } from '../../assets/AppColors';
+import Heading from '../../common/Heading';
 
 const DocumentSection = ({
   label,
@@ -202,6 +203,8 @@ const KYCScreen = () => {
 
   console.log("kycInfo : ", kycInfo)
   return (
+    <>
+    <Heading leftIcon={true} heading={"KYC"} rightAction={<Text></Text>}/>
     <ScrollView style={styles.containerView}>
       <DocumentSection
         label="Aadhar"
@@ -242,6 +245,8 @@ const KYCScreen = () => {
         setBase64Image={setImageBase64GST}
       />
     </ScrollView>
+    </>
+    
   );
 };
 
