@@ -22,7 +22,7 @@ import moment from 'moment';
 import { responsiveFontSize } from '../../utility/utility';
 
 const Orders = () => {
-  const [activeIndex, setActiveIndex] = useState(1);
+  const [activeIndex, setActiveIndex] = useState(0);
   const navigation = useNavigation();
   const token = useSelector(state => state.auth.token);
   const [orderList, setOrderList] = useState([]);
@@ -39,6 +39,7 @@ const Orders = () => {
         },
       });
       setOrderList(res.data || []);
+      
       console.log('order res : ', res.data);
     } catch (error) {
       console.log('Error fetching order list:', error);
@@ -47,9 +48,9 @@ const Orders = () => {
     }
   };
   useEffect(() => {
-    getOrderList();
+      getOrderList();
   }, [activeIndex]);
-
+  
   const handleOrderTracking = async (orderId, imeiNumber) => {
     if (!orderId || !imeiNumber) {
       ToastAndroid.show(
@@ -112,12 +113,6 @@ const Orders = () => {
             Order Id <Text style={tailwind`text-gray-600`}>{item.OrderId}</Text>
           </Text>
         </TouchableOpacity>
-
-        {/* <TouchableOpacity
-          onPress={() => handleOrderTracking(item.OrderId, item.imei_number)}
-          style={tailwind`bg-[${Colors.borderColor}] px-3 py-1 rounded-lg`}>
-          <Text style={tailwind`text-[#fff] font-semibold`}>Track</Text>
-        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={() => handleOrderTracking(item.OrderId, item.imei_number)}
           style={tailwind`bg-[${Colors.borderColor}] px-3 py-1 rounded-lg`}>
@@ -233,6 +228,7 @@ const Orders = () => {
       <View style={tailwind`my-1`}>
         <SpaceBetween justify="space-between">
           {[
+            {id: 0, name: 'All'},
             {id: 1, name: 'Recent'},
             {id: 4, name: 'Ongoing'},
             {id: 3, name: 'Completed'},
@@ -247,7 +243,7 @@ const Orders = () => {
                   : tailwind`border-gray-300`,
               ]}
               onPress={() => setActiveIndex(item.id)}>
-              <Text>{item.name}</Text>
+              <Text style={tailwind`px-[0.2rem]`}>{item.name}</Text>
             </TouchableOpacity>
           ))}
         </SpaceBetween>

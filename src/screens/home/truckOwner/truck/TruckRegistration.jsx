@@ -15,11 +15,12 @@ import CommonInput from '../../../../common/CommonInput';
 import CommonDropdown from '../../../../common/CommonDropdown';
 import apiService from '../../../../redux/apiService';
 import {useSelector} from 'react-redux';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import NewDropdown from '../../../../common/NewDropdown';
 
 const TruckRegistration = () => {
   const token = useSelector(state => state.auth.token);
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const [step, setStep] = useState(1);
   const progress = useRef(new Animated.Value(1)).current;
   const [selectedUnit, setSelectedUnit] = useState('Ton');
@@ -39,9 +40,9 @@ const TruckRegistration = () => {
     ChassisNumber: '',
     PSTNumber: '',
     GSTNumber: '',
-    Unit:selectedUnit
+    Unit: selectedUnit,
   });
-  const [selectedTruckName, setSelectedTruckName] = useState("")
+  const [selectedTruckName, setSelectedTruckName] = useState('');
 
   // Handle Input Changes
   const handleInputChange = (key, value) => {
@@ -155,10 +156,10 @@ const TruckRegistration = () => {
   // Handle Form Submission
   const handleSubmit = async () => {
     if (!validateForm()) {
-        return;
+      return;
     }
-    console.log("formdata ", formData)
-    
+    console.log('formdata ', formData);
+
     try {
       const res = await apiService({
         endpoint: 'truck_owner/truck/registration', // Replace with your actual endpoint
@@ -170,7 +171,7 @@ const TruckRegistration = () => {
       });
       console.log('API Response post:', res.data);
       ToastAndroid.show('Truck registered successfully!', ToastAndroid.SHORT);
-      navigation.navigate('TruckList')
+      navigation.navigate('TruckList');
     } catch (error) {
       console.log('Add truck error:', error);
       ToastAndroid.show(
@@ -180,11 +181,11 @@ const TruckRegistration = () => {
     }
   };
 
-  console.log("truck name : ",  truckName)
+  console.log('truck name : ', truckName);
 
   const truckTypes = truckName ? truckName.map(item => item.TruckType) : [];
 
-console.log(truckTypes);
+  console.log('truckName : ', truckName);
   return (
     <>
       <Heading
@@ -233,7 +234,7 @@ console.log(truckTypes);
         {step === 1 && (
           <ScrollView>
             <View style={styles.form}>
-              <CommonDropdown
+              {/* <CommonDropdown
                 label={'Select Truck'}
                 placeholder={'Truck'}
                 options={truckTypes}
@@ -242,7 +243,20 @@ console.log(truckTypes);
                   setSelectedTruckName(value)
                 }}
                 value={selectedTruckName}
+              /> */}
+              <NewDropdown
+                value={selectedTruckName}
+                onSelect={id => {
+                  handleInputChange('TypeId', id);
+                  setSelectedTruckName(id);
+                }}
+                options={truckName? truckName.map(item => ({
+                  id: item.id,
+                  label: item.TruckType,
+                })):[]}
+                placeholder="Select Truck"
               />
+
               <CommonInput
                 label={'Truck Capacity *'}
                 placeholder={'Enter Truck Capacity'}

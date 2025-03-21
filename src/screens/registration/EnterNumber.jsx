@@ -11,15 +11,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Colors} from '../../assets/AppColors';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import apiService from '../../redux/apiService';
 import {useDispatch} from 'react-redux';
 import {savePhoneNumber} from '../../redux/AuthSlice';
-import {useNavigation} from '@react-navigation/native';
-import {responsiveFontSize} from '../../utility/utility';
+import {CommonActions, useNavigation} from '@react-navigation/native';
+import {isValidNumber, responsiveFontSize} from '../../utility/utility';
 
 const {height, width} = Dimensions.get('screen');
 const EnterNumber = () => {
@@ -30,42 +30,70 @@ const EnterNumber = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSendOtp = async () => {
+    if (loading) return; // Prevent multiple calls
+
     setLoading(true);
-    const data = {
-      //// driver
-      // phone: "7800106847",
-      //// owner
-      // phone: "9616027387",
-      phone: number,
-    };
-    if (!isChecked) {
-      Alert.alert('please check terms and condition');
+
+    // Validate phone number
+    if (!isValidNumber(number)) {
+      setLoading(false);
+      Alert.alert(
+        'Invalid Number',
+        'Please enter a valid 10-digit phone number.',
+      );
       return;
     }
+
+    // Check terms and conditions
+    if (!isChecked) {
+      setLoading(false);
+      Alert.alert(
+        'Terms & Conditions',
+        'Please accept the terms and conditions.',
+      );
+      return;
+    }
+
+    const data = {
+      phone: number,
+    };
+
     try {
       const res = await apiService({
         endpoint: 'truck_owner/send/otp',
         method: 'POST',
         data,
       });
+
       dispatch(savePhoneNumber(number));
-      setLoading(false);
+
       ToastAndroid.show(
         res.message || 'OTP sent successfully!',
         ToastAndroid.SHORT,
       );
 
-      navigation.navigate('VerifyOtp', number);
+      navigation.navigate('VerifyOtp', {phone: number});
     } catch (error) {
-      setLoading(false);
       console.error('Error sending OTP:', error);
+
       ToastAndroid.show(
-        error.message || 'Failed to send OTP. Please try again.',
+        error.response?.data?.message ||
+          'Failed to send OTP. Please try again.',
         ToastAndroid.SHORT,
       );
+    } finally {
+      setLoading(false);
     }
   };
 
+  // useEffect(() => {
+  //   navigation.dispatch(
+  //     CommonActions.reset({
+  //       index: 0,
+  //       routes: [{name: 'Driver'}],
+  //     }),
+  //   );
+  // }, [navigation]);
   return (
     <View
       style={styles.container}

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {createRef, useEffect, useState} from 'react';
 import {
   CommonActions,
   NavigationContainer,
@@ -20,7 +20,7 @@ import TruckOwner from './src/screens/registration/truckOwner/TruckOwner';
 import Driver from './src/screens/registration/driver/Driver';
 import TruckDriverHome from './src/screens/home/truckDriver/TruckDriverHome';
 import TruckOwnerHome from './src/screens/home/truckOwner/TruckOwnerHome';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import DriverList from './src/screens/home/truckOwner/driver/DriverList';
 import TruckList from './src/screens/home/truckOwner/truck/TruckList';
 import TruckRegistration from './src/screens/home/truckOwner/truck/TruckRegistration';
@@ -36,6 +36,7 @@ import Support from './src/screens/account/Support';
 import EditProfile from './src/screens/account/EditProfile';
 import OrderDetail from './src/screens/orders/OrderDetail';
 import UpdateDoc from './src/screens/home/truckOwner/truck/UpdateDoc';
+import DriverUpdateDoc from './src/screens/home/truckOwner/driver/DriverUpdateDoc';
 const Tab = createBottomTabNavigator();
 const AppTabs = () => {
   const roleHome = useSelector(state => state.auth.role || 'Truck Owner');
@@ -91,9 +92,11 @@ const AppTabs = () => {
 
 const HomeStackNavigator = () => {
   const HomeStack = createStackNavigator();
-  const token = useSelector(state => state.auth.token);
+  // const token = useSelector(state => state.auth.token);
+  const token = AsyncStorage.getItem('storeToken');
   const navigation = useNavigation();
   const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
+
   useEffect(() => {
     const bootstrapAsync = async () => {
       try {
@@ -109,186 +112,143 @@ const HomeStackNavigator = () => {
     bootstrapAsync();
   }, []);
 
-  useEffect(() => {
-    const getScreenName = () => {
-      if (token) {
-        return 'AppTabs';
-      } else {
-        return 'Splash';
-      }
-    };
-
-    const screenName = getScreenName();
-
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{name: screenName}],
-      }),
-    );
-  }, [token, navigation]);
-
+  // ✅ Fix here by using useNavigation instead of createRef
   useEffect(() => {
     if (token) {
-      return 'AppTabs';
-    } else {
-      return 'Splash';
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{name: 'AppTabs'}],
+        }),
+      );
     }
-  }, []);
+  }, [token, navigation]);
+
   return (
     <HomeStack.Navigator>
-      {/* <HomeStack.Screen
+      <HomeStack.Screen
         name="Splash"
         component={Splash}
         options={{headerShown: false}}
       />
-      <HomeStack.Screen
-        name="Onboarding"
-        component={Onboarding}
-        options={{headerShown: false}}
-      />
+      {!hasSeenOnboarding && (
+        <HomeStack.Screen
+          name="Onboarding"
+          component={Onboarding}
+          options={{headerShown: false}}
+        />
+      )}
       <HomeStack.Screen
         name="EnterNumber"
         component={EnterNumber}
         options={{headerShown: false}}
-      /> */}
-      {!token ? (
-        <>
-          <HomeStack.Screen
-            name="Splash"
-            component={Splash}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="Onboarding"
-            component={Onboarding}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="EnterNumber"
-            component={EnterNumber}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="SelectUser"
-            component={SelectUser}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="VerifyOtp"
-            component={VerifyOtp}
-            options={{headerShown: false}}
-          />
-          {/* <HomeStack.Screen
-            name="EnterNumber"
-            component={EnterNumber}
-            options={{headerShown: false}}
-          /> */}
-          <HomeStack.Screen
-            name="TruckOwner"
-            component={TruckOwner}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="Driver"
-            component={Driver}
-            options={{headerShown: false}}
-          />
-        </>
-      ) : (
-        <>
-          <HomeStack.Screen
-            name="TruckOwner"
-            component={TruckOwner}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="OrderDetail"
-            component={OrderDetail}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="Driver"
-            component={Driver}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="SignUp"
-            component={SignUp}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="SignIn"
-            component={SignIn}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="DriverList"
-            component={DriverList}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="TruckList"
-            component={TruckList}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="TruckRegistration"
-            component={TruckRegistration}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="AddDriver"
-            component={AddDriver}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="DriverDetail"
-            component={DriverDetail}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="BankDetails"
-            component={BankDetails}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="Company"
-            component={Company}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="KYCScreen"
-            component={KYCScreen}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="Personal"
-            component={Personal}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="Support"
-            component={Support}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="EditProfile"
-            component={EditProfile}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="UpdateDoc"
-            component={UpdateDoc}
-            options={{headerShown: false}}
-          />
-          <HomeStack.Screen
-            name="AppTabs"
-            component={AppTabs}
-            options={{headerShown: false}}
-          />
-        </>
-      )}
+      />
+      <HomeStack.Screen
+        name="SelectUser"
+        component={SelectUser}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="DriverUpdateDoc"
+        component={DriverUpdateDoc}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="VerifyOtp"
+        component={VerifyOtp}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="TruckOwner"
+        component={TruckOwner}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="Driver"
+        component={Driver}
+        options={{headerShown: false}}
+      />
+
+      <HomeStack.Screen
+        name="OrderDetail"
+        component={OrderDetail}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="SignUp"
+        component={SignUp}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="SignIn"
+        component={SignIn}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="DriverList"
+        component={DriverList}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="TruckList"
+        component={TruckList}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="TruckRegistration"
+        component={TruckRegistration}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="AddDriver"
+        component={AddDriver}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="DriverDetail"
+        component={DriverDetail}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="BankDetails"
+        component={BankDetails}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="Company"
+        component={Company}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="KYCScreen"
+        component={KYCScreen}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="Personal"
+        component={Personal}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="Support"
+        component={Support}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="EditProfile"
+        component={EditProfile}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="UpdateDoc"
+        component={UpdateDoc}
+        options={{headerShown: false}}
+      />
+      <HomeStack.Screen
+        name="AppTabs"
+        component={AppTabs}
+        options={{headerShown: false}}
+      />
     </HomeStack.Navigator>
   );
 };
@@ -299,4 +259,5 @@ const App = () => {
     </NavigationContainer>
   );
 };
+
 export default App;

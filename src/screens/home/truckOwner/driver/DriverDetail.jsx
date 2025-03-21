@@ -14,14 +14,13 @@ import SpaceBetween from '../../../../common/SpaceBetween';
 import tailwind from 'twrnc';
 import {useSelector} from 'react-redux';
 import apiService from '../../../../redux/apiService';
-import { responsiveFontSize } from '../../../../utility/utility';
+import {responsiveFontSize} from '../../../../utility/utility';
 
 const DriverDetail = ({route}) => {
-  const {item: driver} = route.params;
-  console.log('driver , id ', driver.id);
+  const {item: driverId} = route.params;
   const token = useSelector(state => state.auth.token);
   const IMAGE_BASE_URL = 'https://api.hindustantruckers.com/api/';
-  // const [driver, setDrivers] = useState({})
+  const [driver, setDrivers] = useState({});
 
   const renderStars = (rating = 5) => {
     return Array.from({length: rating}, (_, i) => (
@@ -37,15 +36,14 @@ const DriverDetail = ({route}) => {
         endpoint: 'truck_owner/driver/details',
         method: 'POST',
         data: {
-          driver_id: driver.id,
+          driver_id: driverId.UserId,
         },
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('driver detail Response:', res);
-
-      setLoading(false); // Stop loading
+      console.log('driver details Response:', res);
+      setDrivers(res?.data);
     } catch (error) {
       console.log('Error fetching truck list:', error);
       setLoading(false); // Stop loading in case of error
@@ -75,8 +73,8 @@ const DriverDetail = ({route}) => {
         rightAction={<Text></Text>}
       />
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.onlineStatus}>Online</Text>
+        <View style={[styles.header, {backgroundColor:driver.status? "green":"red"}]}>
+          <Text style={styles.onlineStatus}>{driver.status ? "Online" : "Offline"}</Text>
         </View>
 
         {/* Profile Image with fallback */}
@@ -84,14 +82,14 @@ const DriverDetail = ({route}) => {
           <Image
             source={
               driver.SelfieImage
-                ? {uri: IMAGE_BASE_URL + driver.SelfieImage}
+                ? {uri: driver.image_base_url+driver.profile_image}
                 : require('../../../../assets/img/registration/agent.png')
             }
             style={styles.profileImage}
           />
           <Text style={styles.name}>{driver.FullName}</Text>
           {/* Dynamic Star Rating */}
-          <View style={styles.ratingContainer}>{renderStars()}</View>
+          <View style={styles.ratingContainer}>{renderStars(driver.rating)}</View>
         </SpaceBetween>
 
         <Text style={styles.label}>
@@ -123,9 +121,32 @@ const DriverDetail = ({route}) => {
             {driver.IsPoliceVerification ? 'Completed' : 'Pending'}
           </Text>
         </Text>
-        <SpaceBetween justify="center" style={tailwind``}>
-          <Text>Asign truck</Text>
+        <SpaceBetween
+        direction='column'
+          justify=""
+          style={tailwind`p-4 bg-gray-100 rounded-lg`}>
+          <Text style={tailwind`text-lg font-semibold text-gray-800 mb-2`}>
+            Assign Truck
+          </Text>
+
+          {driver?.assigned_trucks ? (
+            driver.assigned_trucks.map((item, index) => (
+              <View
+                key={index}
+                style={tailwind`border px-4 py-2 bg-white rounded-lg shadow-sm mb-2`}>
+                <Text style={tailwind`text-base font-medium text-gray-700`}>
+                Truck Number :  {item.TruckNumber}
+                </Text>
+                <Text style={tailwind`text-sm text-gray-500`}>
+                 Truck Name :  {item.TruckType}
+                </Text>
+              </View>
+            ))
+          ) : (
+            <Text style={tailwind`text-gray-500`}>No trucks assigned</Text>
+          )}
         </SpaceBetween>
+
         <SpaceBetween justify="space-between">
           <TouchableOpacity
             style={styles.button}
@@ -155,7 +176,6 @@ const styles = StyleSheet.create({
   },
   header: {
     alignSelf: 'flex-start',
-    backgroundColor: 'green',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 5,

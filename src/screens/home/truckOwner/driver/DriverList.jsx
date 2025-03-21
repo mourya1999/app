@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, RefreshControl, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import tailwind from 'twrnc';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
@@ -18,6 +18,7 @@ const DriverList = () => {
   const token = useSelector(state => state.auth.token);
   const [drivers, setDrivers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false); // For pull-to-refresh
 
   const getDriver = async () => {
     try {
@@ -28,14 +29,15 @@ const DriverList = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log('API Response:', res.data);
+      console.log('API Response driver list :', res.data);
 
-      // Set the data in the state
       setDrivers(res.data || []); // Ensure data is an array even if API returns null
-      setLoading(false); // Stop loading
+      setLoading(false);
+      setRefreshing(false); // Stop refreshing
     } catch (error) {
       console.log('Error fetching truck list:', error);
-      setLoading(false); // Stop loading in case of error
+      setLoading(false);
+      setRefreshing(false); // Stop refreshing in case of error
     }
   };
 
@@ -43,15 +45,19 @@ const DriverList = () => {
     getDriver();
   }, []);
 
+  // Handle pull-to-refresh
+  const onRefresh = () => {
+    setRefreshing(true);
+    getDriver();
+  };
+
   const renderItem = ({item}) => (
-    <TouchableOpacity
-      onPress={() => navigation.navigate('DriverDetail', {item})}
+    <View
       style={tailwind`w-[96%] rounded-lg mx-2 mt-2 p-2 bg-white shadow border border-[teal]`}>
-      {/* First Row: Profile Image, Name, and Location */}
       <View style={tailwind`flex-row justify-between items-center`}>
-        {/* Left Section: Profile Image and Details */}
-        <View style={tailwind`flex-row gap-2 items-center`}>
-          {/* Profile Image or Placeholder */}
+        <TouchableOpacity
+          onPress={() => navigation.navigate('DriverDetail', {item})}
+          style={tailwind`flex-row gap-2 items-center`}>
           {item.SelfieImage ? (
             <Image
               source={{
@@ -65,8 +71,6 @@ const DriverList = () => {
               <Text style={tailwind`text-gray-500`}>No</Text>
             </View>
           )}
-
-          {/* Name and City */}
           <View>
             <Text
               style={[
@@ -84,10 +88,11 @@ const DriverList = () => {
               {item.City}
             </Text>
           </View>
-        </View>
+        </TouchableOpacity>
 
-        {/* Right Section: Document Status */}
-        <View style={tailwind`flex-row items-center gap-2`}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('DriverUpdateDoc', {item})}
+          style={tailwind`flex-row items-center gap-2`}>
           <Text style={[styles.infoText, {fontSize: responsiveFontSize(14)}]}>
             Document Status
           </Text>
@@ -96,10 +101,11 @@ const DriverList = () => {
           ) : (
             <AntDesign name="checkcircle" size={24} color={'green'} />
           )}
-        </View>
+        </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+    </View>
   );
+
   return (
     <>
       <Heading
@@ -121,24 +127,32 @@ const DriverList = () => {
       />
 
       <FlatList
-        data={drivers} // Pass the array of trucks
-        keyExtractor={item => item.id.toString()} // Use unique ID as the key
-        renderItem={renderItem} // Render each item
+        data={drivers}
+        keyExtractor={item => item.id.toString()}
+        renderItem={renderItem}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh} // Handle pull-to-refresh
+            colors={['#00A6B4']} // Loader color (optional)
+            tintColor="#00A6B4" // iOS loader color (optional)
+          />
+        }
         ListEmptyComponent={
           !loading && (
             <Text style={tailwind`text-center text-gray-500 mt-5`}>
-              No trucks available.
+              No drivers available.
             </Text>
           )
         }
-        style={[tailwind`bg-white`, {borderRadius: 10}]} // Rounded corners
+        style={[tailwind`bg-white`, {borderRadius: 10}]}
         contentContainerStyle={[tailwind`pb-20`]}
       />
     </>
   );
 };
 
-export default DriverList;
+export default DriverList
 const styles = StyleSheet.create({
   nameText: {
     fontFamily: 'Poppins-Bold',

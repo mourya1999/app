@@ -15,7 +15,7 @@ import { Colors } from '../assets/AppColors';
 
 const { width } = Dimensions.get('window');
 
-const CommonDropdown = ({
+const NewDropdown = ({
   value,
   onSelect,
   placeholder = 'Select an option',
@@ -37,11 +37,11 @@ const CommonDropdown = ({
   const inputRef = useRef(null);
 
   const filteredOptions = options.filter((option) =>
-    option.toLowerCase().includes(searchQuery.toLowerCase())
+    option.label.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleSelect = (option) => {
-    onSelect(option);
+    onSelect(option.id); // Store id
     setIsDropdownOpen(false);
     setSearchQuery('');
   };
@@ -63,7 +63,7 @@ const CommonDropdown = ({
         style={[styles.inputWrapper, inputStyle]}
       >
         <Text style={[styles.input, !value && styles.placeholder]}>
-          {value || placeholder}
+          {options.find((item) => item.id === value)?.label || placeholder}
         </Text>
         <Icon
           name={rightIcon}
@@ -99,14 +99,14 @@ const CommonDropdown = ({
 
             <FlatList
               data={filteredOptions}
-              keyExtractor={(item, index) => index.toString()}
+              keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => (
                 <TouchableOpacity
                   style={[styles.option, optionStyle]}
                   onPress={() => handleSelect(item)}
                 >
                   <Text style={[styles.optionText, optionTextStyle]}>
-                    {item}
+                    {item.label}
                   </Text>
                 </TouchableOpacity>
               )}
@@ -118,7 +118,7 @@ const CommonDropdown = ({
   );
 };
 
-export default CommonDropdown;
+export default NewDropdown;
 
 const styles = StyleSheet.create({
   container: {

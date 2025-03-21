@@ -347,15 +347,15 @@ const TruckList = () => {
 
                       {/* Right Section: Document Status */}
                       <TouchableOpacity
-                        onPress={() => handleAssign(truckId, item.id)}
+                        onPress={() => handleAssign(truckId, item.UserId)}
                         style={tailwind`flex-row items-center gap-2`}>
                         <Text
                           style={[
                             styles.infoText,
                             {fontSize: responsiveFontSize(14)},
                           ]}>
-                          Document Status
-                        </Text>
+                          Document Status 
+                        </Text> 
                         {item.document_status === 0 ? (
                           <MaterialIcons
                             name="dangerous"

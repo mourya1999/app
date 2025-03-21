@@ -13,8 +13,16 @@ const Account = ({navigation}) => {
   const dispatch = useDispatch()
   const [user, setUser] = useState({})
   const handleLogout = () => {
-    dispatch(clearToken())
+    dispatch(clearToken());
+     navigation.reset({
+      index: 0, 
+      routes: [
+        { name: 'Splash' },
+      ],
+    });
   };
+  
+  
   const getProfileData = async () => {
     try {
       const res = await apiService({

@@ -39,10 +39,6 @@ const TruckDriverHome = () => {
   const [loading, setLoading] = useState(true);
   const {profile} = useProfile();
 
-  console.log('driver profile : ', profile);
-  useEffect(() => {
-    getDriver();
-  }, [activeIndex]);
 
   const getDriver = async () => {
     try {
@@ -52,13 +48,17 @@ const TruckDriverHome = () => {
         headers: {Authorization: `Bearer ${token}`},
       });
       setDriver(res.data || []);
+      console.log("driver order list : ", res?.data)
     } catch (error) {
       console.log('Error fetching truck list:', error);
     } finally {
       setLoading(false);
     }
   };
-
+  useEffect(() => {
+      getDriver();
+  }, [activeIndex]);
+  
   const handleCall = phoneNumber => {
     if (!phoneNumber) {
       ToastAndroid.show('Phone number is missing!', ToastAndroid.SHORT);
@@ -234,13 +234,13 @@ const TruckDriverHome = () => {
     <>
       <StatusBar backgroundColor={Colors.appColor} barStyle="light-content" />
       <View
-        style={tailwind`bg-[#1E9891] h-[38%] py-2 px-4 rounded-b-[20px] border-b-none`}>
+        style={tailwind`bg-[#1E9891] h-[30vh] py-2 px-4 rounded-b-[20px] border-b-none`}>
         <Text style={tailwind`text-center text-white font-normal`}>Today</Text>
         <Text style={tailwind`text-center text-white font-bold text-lg`}>
           {currentTime}
         </Text>
 
-        <View style={tailwind`h-[75%] bg-[#fff] rounded-lg px-2 py-4`}>
+        <View style={tailwind`h-[18vh] bg-[#fff] rounded-lg px-2 py-4`}>
           <SpaceBetween justify="" style={tailwind`flex gap-4`}>
             <Image
               style={tailwind`h-12 w-12 border rounded-full shadow`}
@@ -277,6 +277,7 @@ const TruckDriverHome = () => {
       <View style={tailwind`my-2`}>
         <SpaceBetween justify="space-between">
           {[
+            {id: 0, name: 'All'},
             {id: 1, name: 'Recent'},
             {id: 4, name: 'Ongoing'},
             {id: 3, name: 'Completed'},
@@ -286,12 +287,12 @@ const TruckDriverHome = () => {
               key={item.id}
               style={[
                 tailwind`py-3 px-2 border rounded-sm`,
-                activeIndex === item.id
+                activeIndex == item.id
                   ? tailwind`border-[#1E9891] bg-teal-50`
                   : tailwind`border-gray-300`,
               ]}
               onPress={() => setActiveIndex(item.id)}>
-              <Text>{item.name}</Text>
+              <Text style={tailwind`px-[0.1rem]`}>{item.name}</Text>
             </TouchableOpacity>
           ))}
         </SpaceBetween>
